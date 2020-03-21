@@ -27,7 +27,7 @@ import * as Yup from "yup";
 const App = ({ google }) => {
   const { latitude, longitude, timestamp, accuracy, error } = usePosition();
   const [markerPosition, setMarkerPosition] = useState(null);
-  const [anonymous, setAnonymous] = useState(true);
+  const [anonymous, setAnonymous] = useState(false);
 
   const positionAvailable = latitude && longitude;
   const mapRef = useRef(null);
@@ -148,7 +148,7 @@ const App = ({ google }) => {
                     </Field.Body>
                   </Field>
 
-                  {anonymous && (
+                  {!anonymous && (
                     <>
                       <Field>
                         <Label htmlFor="name">Nombre</Label>
