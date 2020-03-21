@@ -16,13 +16,27 @@ import {
 
 import "./App.css";
 import { DisplayFormikState } from "./helper";
-import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
+import { Map, Marker, GoogleApiWrapper, Listing } from "google-maps-react";
 
 import { usePosition } from "use-position";
 
 import React, { useState, useEffect, useRef } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  firstName: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  lastName: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  email: Yup.string()
+    .email("Invalid email")
+    .required("Required")
+});
 
 const App = ({ google }) => {
   const { latitude, longitude, timestamp, accuracy, error } = usePosition();
@@ -33,8 +47,6 @@ const App = ({ google }) => {
   const mapRef = useRef(null);
 
   const onMapClicked = (mapProps, map, clickEvent) => {
-    console.log(clickEvent.latLng.lat());
-    console.log(clickEvent.latLng.lng());
     setMarkerPosition({
       lat: clickEvent.latLng.lat(),
       lng: clickEvent.latLng.lng()
@@ -44,6 +56,17 @@ const App = ({ google }) => {
   useEffect(() => {
     setMarkerPosition({ lat: latitude, lng: longitude });
   }, [latitude, longitude]);
+
+  const fetchPlaces = (mapProps, map) => {
+    const { google } = mapProps;
+
+    new google.maps.places.Autocomplete(
+      document.getElementById("autocomplete"),
+      { types: ["geocode"] }
+    );
+
+    // debugger;
+  };
 
   return (
     <Container>
@@ -58,20 +81,18 @@ const App = ({ google }) => {
           <Formik
             initialValues={{
               usedChannel: "Llamada",
-              name: "",
+              firstName: "",
               lastName: "",
               phone: "",
-              email: ""
+              email: "",
+              complaintType: "",
+              observations: ""
             }}
             onSubmit={async values => {
               await new Promise(resolve => setTimeout(resolve, 500));
               alert(JSON.stringify(values, null, 2));
             }}
-            validationSchema={Yup.object().shape({
-              email: Yup.string()
-                .email()
-                .required("Required")
-            })}
+            validationSchema={validationSchema}
           >
             {props => {
               const {
@@ -151,23 +172,25 @@ const App = ({ google }) => {
                   {!anonymous && (
                     <>
                       <Field>
-                        <Label htmlFor="name">Nombre</Label>
+                        <Label htmlFor="firstName">Nombre</Label>
                         <Control>
                           <Input
-                            id="name"
+                            id="firstName"
                             placeholder="Ingresa tu nombre"
                             type="text"
-                            value={values.name}
+                            value={values.firstName}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             className={
-                              errors.name && touched.name
+                              errors.firstName && touched.firstName
                                 ? "text-input error"
                                 : "text-input"
                             }
                           />
-                          {errors.name && touched.name && (
-                            <div className="input-feedback">{errors.name}</div>
+                          {errors.firstName && touched.firstName && (
+                            <div className="input-feedback">
+                              {errors.firstName}
+                            </div>
                           )}
                         </Control>
                       </Field>
@@ -259,7 +282,7 @@ const App = ({ google }) => {
                             Aglomeración en espacio público
                           </Select.Option>
                           <Select.Option
-                            value="medidas_sanitaria"
+                            value="medidas_sanitarias"
                             label="Incumplimiento de medidas sanitarias"
                           >
                             Incumplimiento de medidas sanitarias
@@ -290,28 +313,45 @@ const App = ({ google }) => {
                   </Field>
 
                   <Field>
-                    {positionAvailable && (
-                      <Map
-                        ref={mapRef}
-                        google={google}
-                        containerStyle={{
-                          height: "40vh",
-                          width: "100%",
-                          position: "relative"
-                        }}
-                        initialCenter={{
-                          lat: latitude,
-                          lng: longitude
-                        }}
-                        onClick={onMapClicked}
-                        zoom={15}
-                      >
-                        <Marker
-                          onClick={() => console.log("clicked")}
-                          name={"Current location"}
-                          position={markerPosition}
-                        />
-                      </Map>
+                  <Label htmlFor="autocomplete">Lugar, Calle, Dirección</Label>
+                    <Input
+                      id="autocomplete"
+                      placeholder="Ingresa el lugar"
+                      onFocus={() => {}}
+                      type="text"
+                    />
+                  </Field>
+
+                  <Field>
+                    {positionAvailable ? (
+                      <>
+                        <Label htmlFor="complaintType">Ubicación</Label>
+                        <Map
+                          ref={mapRef}
+                          google={google}
+                          containerStyle={{
+                            height: "40vh",
+                            width: "100%",
+                            position: "relative"
+                          }}
+                          initialCenter={{
+                            lat: latitude,
+                            lng: longitude
+                          }}
+                          onClick={onMapClicked}
+                          onReady={fetchPlaces}
+                          zoom={15}
+                        >
+                          <Marker
+                            onClick={() => console.log("clicked")}
+                            name={"Current location"}
+                            position={markerPosition}
+                          />
+                          {/* <Listing places={{}} /> */}
+                        </Map>
+                      </>
+                    ) : (
+                      <Label>Loading...</Label>
                     )}
                   </Field>
 
