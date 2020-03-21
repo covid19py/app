@@ -531,5 +531,6 @@ const App = ({ google }) => {
 
 export default GoogleApiWrapper({
   apiKey: process.env.REACT_APP_GMAPS_API_KEY, // google maps key
+  language: 'es-419',
   libraries: ["places"]
 })(App);
