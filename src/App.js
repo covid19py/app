@@ -47,10 +47,10 @@ const App = ({ google }) => {
   const mapRef = useRef(null);
   const autocomplete = useRef(null);
 
-  const onMapClicked = (mapProps, map, clickEvent) => {
+  const onMapClicked = (mapProps, map, e) => {
     setMarkerPosition({
-      lat: clickEvent.latLng.lat(),
-      lng: clickEvent.latLng.lng()
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng()
     });
   };
 
@@ -63,6 +63,13 @@ const App = ({ google }) => {
       })
     }
   };
+
+  const onDragEndHandler = (mapProps, map, e) => {
+    setMarkerPosition({
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng()
+    });
+  }
 
   useEffect(() => {
     setMarkerPosition({ lat: latitude, lng: longitude });
@@ -365,8 +372,9 @@ const App = ({ google }) => {
                             onClick={() => console.log("clicked")}
                             name={"Current location"}
                             position={markerPosition}
+                            draggable={true}
+                            onDragend={onDragEndHandler}
                           />
-                          {/* <Listing places={{}} /> */}
                         </Map>
                       </>
                     ) : (
