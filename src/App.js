@@ -47,6 +47,7 @@ const App = ({ google }) => {
   const positionAvailable = latitude && longitude;
   const mapRef = useRef(null);
   const autocomplete = useRef(null);
+  const autocompleteService = useRef(null);
   const geocoder = useRef(null);
 
   const callGeocoderAPI = ({ latlng }) => {
@@ -54,15 +55,15 @@ const App = ({ google }) => {
       if (status === "OK") {
         if (results[0]) {
           setStreet(results[0].formatted_address);
-          const addressComponents = results[0].address_components
+          const addressComponents = results[0].address_components;
           const city = addressComponents.find(component => {
-            return component.types.find(type => type === "locality")
-          })
+            return component.types.find(type => type === "locality");
+          });
           const country = addressComponents.find(component => {
-            return component.types.find(type => type === "country")
-          })
-          setCity(city.long_name)
-          setCountry(country.long_name)
+            return component.types.find(type => type === "country");
+          });
+          setCity(city.long_name);
+          setCountry(country.long_name);
         }
       } else {
         console.error("Geocoder failed due to: " + status);
@@ -71,15 +72,19 @@ const App = ({ google }) => {
   };
 
   const placeChangedHandler = () => {
-    const place = autocomplete.current.getPlace();
-    const location = place.geometry.location;
-    if (place) {
-      const latlng = {
-        lat: parseFloat(location.lat()),
-        lng: parseFloat(location.lng())
-      };
-      callGeocoderAPI({ latlng });
-      setMarkerPosition(latlng);
+    try {
+      const place = autocomplete.current.getPlace();
+      const location = place.geometry.location;
+      if (place) {
+        const latlng = {
+          lat: parseFloat(location.lat()),
+          lng: parseFloat(location.lng())
+        };
+        callGeocoderAPI({ latlng });
+        setMarkerPosition(latlng);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -119,6 +124,8 @@ const App = ({ google }) => {
       document.getElementById("autocomplete"),
       options
     );
+
+    autocompleteService.current = new google.maps.places.AutocompleteService();
 
     autocomplete.current.addListener("place_changed", placeChangedHandler);
   };
