@@ -45,12 +45,23 @@ const App = ({ google }) => {
 
   const positionAvailable = latitude && longitude;
   const mapRef = useRef(null);
+  const autocomplete = useRef(null);
 
   const onMapClicked = (mapProps, map, clickEvent) => {
     setMarkerPosition({
       lat: clickEvent.latLng.lat(),
       lng: clickEvent.latLng.lng()
     });
+  };
+
+  const placeChangedHandler = () => {
+    const place = autocomplete.current.getPlace();
+    if (place) {
+      setMarkerPosition({
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      })
+    }
   };
 
   useEffect(() => {
@@ -60,12 +71,18 @@ const App = ({ google }) => {
   const fetchPlaces = (mapProps, map) => {
     const { google } = mapProps;
 
-    new google.maps.places.Autocomplete(
+    const options = {
+      types: ["establishment"],
+      componentRestrictions: { country: "py" }
+    };
+
+    autocomplete.current = new google.maps.places.Autocomplete(
       document.getElementById("autocomplete"),
-      { types: ["geocode"] }
+      options
     );
 
-    // debugger;
+    autocomplete.current
+      .addListener("place_changed", placeChangedHandler);
   };
 
   return (
@@ -313,11 +330,12 @@ const App = ({ google }) => {
                   </Field>
 
                   <Field>
-                  <Label htmlFor="autocomplete">Lugar, Calle, Dirección</Label>
+                    <Label htmlFor="autocomplete">
+                      Lugar, Calle, Dirección
+                    </Label>
                     <Input
                       id="autocomplete"
                       placeholder="Ingresa el lugar"
-                      onFocus={() => {}}
                       type="text"
                     />
                   </Field>
@@ -338,6 +356,7 @@ const App = ({ google }) => {
                             lat: latitude,
                             lng: longitude
                           }}
+                          center={markerPosition}
                           onClick={onMapClicked}
                           onReady={fetchPlaces}
                           zoom={15}
