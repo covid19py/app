@@ -16,7 +16,7 @@ import {
 
 import "./App.css";
 import { DisplayFormikState } from "./helper";
-import { Map, Marker, GoogleApiWrapper, Listing } from "google-maps-react";
+import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 
 import { usePosition } from "use-position";
 
@@ -42,10 +42,12 @@ const App = ({ google }) => {
   const { latitude, longitude, timestamp, accuracy, error } = usePosition();
   const [markerPosition, setMarkerPosition] = useState(null);
   const [anonymous, setAnonymous] = useState(false);
+  const [street, setStreet] = useState("");
 
   const positionAvailable = latitude && longitude;
   const mapRef = useRef(null);
   const autocomplete = useRef(null);
+  const geocoder = useRef(null);
 
   const onMapClicked = (mapProps, map, e) => {
     setMarkerPosition({
@@ -56,11 +58,28 @@ const App = ({ google }) => {
 
   const placeChangedHandler = () => {
     const place = autocomplete.current.getPlace();
+    const location = place.geometry.location;
+    const lat = location.lat();
+    const lng = location.lng();
     if (place) {
+      const latlng = {
+        lat: parseFloat(lat),
+        lng: parseFloat(lng)
+      };
+
+      geocoder.current.geocode({ location: latlng }, function(results, status) {
+        if (status === "OK") {
+          if (results[0]) {
+            setStreet(results[0].formatted_address);
+          }
+        } else {
+          console.error("Geocoder failed due to: " + status);
+        }
+      });
       setMarkerPosition({
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
-      })
+        lat,
+        lng
+      });
     }
   };
 
@@ -69,7 +88,7 @@ const App = ({ google }) => {
       lat: e.latLng.lat(),
       lng: e.latLng.lng()
     });
-  }
+  };
 
   useEffect(() => {
     setMarkerPosition({ lat: latitude, lng: longitude });
@@ -83,13 +102,14 @@ const App = ({ google }) => {
       componentRestrictions: { country: "py" }
     };
 
+    geocoder.current = new google.maps.Geocoder();
+
     autocomplete.current = new google.maps.places.Autocomplete(
       document.getElementById("autocomplete"),
       options
     );
 
-    autocomplete.current
-      .addListener("place_changed", placeChangedHandler);
+    autocomplete.current.addListener("place_changed", placeChangedHandler);
   };
 
   return (
@@ -97,7 +117,7 @@ const App = ({ google }) => {
       <Content>
         <div className="app">
           <Level>
-            <Level.Item as="p" textAlign="centered">
+            <Level.Item textAlign="centered">
               <Title size="3">Gestión de denuncias</Title>
             </Level.Item>
           </Level>
@@ -337,14 +357,34 @@ const App = ({ google }) => {
                   </Field>
 
                   <Field>
-                    <Label htmlFor="autocomplete">
-                      Lugar, Calle, Dirección
-                    </Label>
+                    <Label htmlFor="autocomplete">Lugar</Label>
                     <Input
                       id="autocomplete"
                       placeholder="Ingresa el lugar"
                       type="text"
                     />
+                  </Field>
+
+                  <Field>
+                    <Label htmlFor="phone">Dirección</Label>
+                    <Control>
+                      <Input
+                        id="street"
+                        placeholder=""
+                        type="tel"
+                        value={street}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          errors.street && touched.street
+                            ? "text-input error"
+                            : "text-input"
+                        }
+                      />
+                      {errors.street && touched.street && (
+                        <div className="input-feedback">{errors.street}</div>
+                      )}
+                    </Control>
                   </Field>
 
                   <Field>
