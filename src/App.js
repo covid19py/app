@@ -1,4 +1,6 @@
 // Helper styles for demo
+import { Content, Container, Field, Control, Label, Input, Button, Select, Title, Level } from 'rbx';
+
 import "./App.css";
 import { DisplayFormikState } from "./helper";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
@@ -30,8 +32,16 @@ const App = ({ google }) => {
   }, [latitude, longitude]);
 
   return (
+    <Container>
+    <Content>
     <div className="app">
-      <h1>Gestión de denuncias</h1>
+      <Level>
+        <Level.Item as="p" textAlign="centered">
+          <Title size="3">
+            Gestión de denuncias
+          </Title>
+        </Level.Item>
+      </Level>
 
       <Formik
         initialValues={{
@@ -65,30 +75,30 @@ const App = ({ google }) => {
           } = props;
           return (
             <form onSubmit={handleSubmit}>
-              <label htmlFor="usedChannel" style={{ display: "block" }}>
-                Canal utilizado para la denuncia
-              </label>
-              <select
-                id="usedChannel"
-                name="usedChannel"
-                value={values.usedChannel}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                style={{ display: "block" }}
-              >
-                <option value="llamada" label="Llamada" />
-                <option value="redes_sociales" label="Redes Sociales" />
-                <option value="email" label="Correo electrónico" />
-                <option value="otros" label="Otros" />
-              </select>
-              {errors.usedChannel && touched.usedChannel && (
-                <div className="input-feedback">{errors.usedChannel}</div>
-              )}
-              <br />
-              <label htmlFor="name" style={{ display: "block" }}>
+              <Field>
+                <Label htmlFor="usedChannel">Canal de denuncia</Label>
+                <Control>
+                  <Select.Container fullwidth>
+                    <Select id="usedChannel"
+                        name="usedChannel"
+                        value={values.usedChannel}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                    >
+                      <Select.Option value="llamada" label="Llamada">Llamada</Select.Option>
+                      <Select.Option value="redes_sociales" label="Redes Sociales">Redes Sociales</Select.Option>
+                      <Select.Option value="email" label="Correo electrónico">Correo electrónico</Select.Option>
+                      <Select.Option value="otros" label="Otros">Redes Sociales</Select.Option>
+                    </Select>
+                  </Select.Container>
+                </Control>
+              </Field>
+              <Field>
+              <Label htmlFor="name">
                 Nombre
-              </label>
-              <input
+              </Label>
+              <Control>
+              <Input
                 id="name"
                 placeholder="Ingresa tu nombre"
                 type="text"
@@ -104,11 +114,15 @@ const App = ({ google }) => {
               {errors.name && touched.name && (
                 <div className="input-feedback">{errors.name}</div>
               )}
-              <br />
-              <label htmlFor="lastName" style={{ display: "block" }}>
+              </Control>
+              </Field>
+
+              <Field>
+              <Label htmlFor="lastName">
                 Apellido
-              </label>
-              <input
+              </Label>
+              <Control>
+              <Input
                 id="lastName"
                 placeholder="Ingresa tu apellido"
                 type="text"
@@ -124,77 +138,91 @@ const App = ({ google }) => {
               {errors.lastName && touched.lastName && (
                 <div className="input-feedback">{errors.lastName}</div>
               )}
-              <br />
-              <label htmlFor="phone" style={{ display: "block" }}>
-                Número
-              </label>
-              <input
-                id="phone"
-                placeholder="Número de celular o línea baja"
-                type="text"
-                value={values.phone}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={
-                  errors.phone && touched.phone
-                    ? "text-input error"
-                    : "text-input"
-                }
-              />
-              {errors.phone && touched.phone && (
-                <div className="input-feedback">{errors.phone}</div>
-              )}
-              <br />
-              <label htmlFor="email" style={{ display: "block" }}>
-                Correo electrónico
-              </label>
-              <input
-                id="email"
-                placeholder="Ingresa tu correo eléctronico"
-                type="text"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={
-                  errors.email && touched.email
-                    ? "text-input error"
-                    : "text-input"
-                }
-              />
-              {errors.email && touched.email && (
-                <div className="input-feedback">{errors.email}</div>
-              )}
-              <br />
-              <label htmlFor="complaintType" style={{ display: "block" }}>
-                Canal utilizado para la denuncia
-              </label>
-              <select
-                id="complaintType"
-                name="complaintType"
-                value={values.complaintType}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                style={{ display: "block" }}
-              >
-                <option
-                  value="aglomeracion"
-                  label="Aglomeración en espacio público"
-                />
-                <option
-                  value="medidas_sanitarias"
-                  label="Incumplimiento de medidas sanitarias"
-                />
-                <option
-                  value="cuarentena"
-                  label="Incumplimiento de cuarentena"
-                />
-                <option value="sintomas" label="Reporte de síntomas" />
-                <option value="otros" label="Otros" />
-              </select>
-              {errors.complaintType && touched.complaintType && (
-                <div className="input-feedback">{errors.complaintType}</div>
-              )}
-              <br />
+              </Control>
+              </Field>
+
+              <Field>
+                <Label htmlFor="phone">
+                  Teléfono
+                </Label>
+                <Control>
+                  <Input id="phone"
+                    placeholder="Número de celular o línea baja"
+                    type="tel"
+                    value={values.phone}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={
+                      errors.phone && touched.phone
+                        ? "text-input error"
+                        : "text-input"
+                    }
+                  />
+                  {errors.phone && touched.phone && (
+                    <div className="input-feedback">{errors.phone}</div>
+                  )}
+                </Control>
+              </Field>
+
+
+              <Field>
+                <Label htmlFor="email">
+                  Correo electrónico
+                </Label>
+                <Control>
+                  <Input id="email"
+                    placeholder="Ingresa tu correo eléctronico"
+                    type="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={
+                      errors.email && touched.email
+                        ? "text-input error"
+                        : "text-input"
+                    }
+                  />
+                  {errors.email && touched.email && (
+                    <div className="input-feedback">{errors.email}</div>
+                  )}
+                </Control>
+              </Field>          
+
+              <Field>
+                <Label htmlFor="complaintType">Tipo de denuncia</Label>
+                <Control>
+                  <Select.Container fullwidth>
+                    <Select id="complaintType"
+                        name="complaintType"
+                        value={values.complaintType}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                    >
+                      <Select.Option value="aglomeracion" label="Aglomeración en espacio público">
+                        Aglomeración en espacio público
+                      </Select.Option>
+                      <Select.Option value="medidas_sanitaria" label="Incumplimiento de medidas sanitarias">
+                        Incumplimiento de medidas sanitarias
+                      </Select.Option>
+                      <Select.Option value="cuarentena" label="Incumplimiento de cuarentena">
+                        Incumplimiento de cuarentena
+                      </Select.Option>
+                      <Select.Option value="sintomas" label="Reporte de síntomas">
+                        Reporte de síntomas
+                      </Select.Option>
+                      <Select.Option value="otros" label="Otros">
+                        Otros
+                      </Select.Option>                      
+                    </Select>
+                  </Select.Container>
+                  {errors.complaintType && touched.complaintType && (
+                    <div className="input-feedback">{errors.complaintType}</div>
+                  )}
+                </Control>
+              </Field>
+                
+              
+              <Field>
               {positionAvailable && (
                 <Map
                   ref={mapRef}
@@ -218,17 +246,19 @@ const App = ({ google }) => {
                   />
                 </Map>
               )}
-              <button
-                type="button"
-                className="outline"
-                onClick={handleReset}
-                disabled={!dirty || isSubmitting}
-              >
-                Reset
-              </button>
-              <button type="submit" disabled={isSubmitting}>
-                Submit
-              </button>
+              </Field>
+              <Field kind="group">
+              <Button.Group size="large">
+                  <Button rounded color="success" disabled={isSubmitting}>Submit</Button>
+                
+                  <Button rounded color="danger" outlined
+                    type="button"
+                    className="outline"
+                    onClick={handleReset}
+                    disabled={!dirty || isSubmitting}
+                  >Reset</Button>
+              </Button.Group>
+              </Field>
 
               <DisplayFormikState {...props} />
             </form>
@@ -236,6 +266,8 @@ const App = ({ google }) => {
         }}
       </Formik>
     </div>
+    </Content>
+    </Container>
   );
 };
 

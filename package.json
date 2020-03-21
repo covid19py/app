@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "formik": "^2.1.4",
     "google-maps-react": "^2.0.2",
+    "rbx": "^2.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.0",
