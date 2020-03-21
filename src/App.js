@@ -78,7 +78,7 @@ const App = ({ google }) => {
         lat: parseFloat(location.lat()),
         lng: parseFloat(location.lng())
       };
-      // callGeocoderAPI({ latlng });
+      callGeocoderAPI({ latlng });
       setMarkerPosition(latlng);
     }
   };
