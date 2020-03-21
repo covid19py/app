@@ -1,0 +1,67 @@
+{
+    "$id": "https://github.com/covid19py/app/schemas/denuncia.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Denuncia",
+    "type": "object",
+    "properties": {
+        "fecha_creacion": {
+            "type": "integer"
+        },
+        "fecha_actualizacion": {
+            "type": "integer",
+        },
+        "canal": {
+            "type": "string",
+            "description": "Canal a través del que se recibe la denuncia"
+        },
+        "nombre": {
+            "type": "string",
+            "description": "Nombre del denunciante"
+        },
+        "apellido": {
+            "description": "Apellido del denunciante",
+            "type": "string",
+            "minimum": 0
+        },
+        "telefono": {
+            "description": "Número telefónico del denunciante",
+            "type": "string"
+        },
+        "correo": {
+            "description": "Correo electrónico del denunciante",
+            "type": "string"
+        },
+        "departamento": {
+            "description": "Departamento",
+            "type": "string"
+        },
+        "ciudad": {
+            "description": "Ciudad",
+            "type": "string"
+        },
+        "barrio": {
+            "description": "Barrio",
+            "type": "string"
+        },
+        "tipo_denuncia": {
+            "description": "Tipo de denuncia",
+            "type": "string"
+        },
+        "coordenadas": {
+            "description": "Coordenadas geográficas",
+            "type": "array",
+            "items": [
+                { "type": "integer" },
+                { "type": "integer" }
+            ]
+        },
+        "observaciones": {
+            "description": "Observaciones adicionales",
+            "type": "string"
+        },
+        "estado": {
+            "description": "Estado de la denuncia",
+            "type": "string"
+        }
+    }
+}
