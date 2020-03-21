@@ -3,15 +3,14 @@ from flask_pymongo import PyMongo, ASCENDING, DESCENDING
 
 from flask_json_schema import JsonSchema
 
-app = Flask(__name__,  static_url_path='')
+app = Flask(__name__, static_url_path='', template_folder='build')
 
 app.config["MONGO_URI"] = "mongodb://localhost:27017/app"
 mongo = PyMongo(app)
 
-@app.route('/assets/<path:path>')
+@app.route('/static/<path:path>')
 def send_assets(path):
-    return send_from_directory('assets', path)
-
+    return send_from_directory('build/static', path)
 
 @app.route('/', methods=['GET'])
 def index():
