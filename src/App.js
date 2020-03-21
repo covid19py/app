@@ -53,13 +53,13 @@ const App = () => (
               onBlur={handleBlur}
               style={{ display: "block" }}
             >
-              <option value="Llamada" label="Llamada" />
-              <option value="Redes sociales" label="Redes Sociales" />
-              <option value="Correo electrónico" label="Correo electrónico" />
-              <option value="Otros" label="Otros" />
+              <option value="llamada" label="Llamada" />
+              <option value="redes_sociales" label="Redes Sociales" />
+              <option value="email" label="Correo electrónico" />
+              <option value="otros" label="Otros" />
             </select>
-            {errors.color && touched.color && (
-              <div className="input-feedback">{errors.color}</div>
+            {errors.usedChannel && touched.usedChannel && (
+              <div className="input-feedback">{errors.usedChannel}</div>
             )}
             <br />
             <label htmlFor="name" style={{ display: "block" }}>
@@ -138,6 +138,27 @@ const App = () => (
             />
             {errors.email && touched.email && (
               <div className="input-feedback">{errors.email}</div>
+            )}
+            <br />
+            <label htmlFor="complaintType" style={{ display: "block" }}>
+              Canal utilizado para la denuncia
+            </label>
+            <select
+              id="complaintType"
+              name="complaintType"
+              value={values.complaintType}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              style={{ display: "block" }}
+            >
+              <option value="aglomeracion" label="Aglomeración en espacio público" />
+              <option value="medidas_sanitarias" label="Incumplimiento de medidas sanitarias" />
+              <option value="cuarentena" label="Incumplimiento de cuarentena" />
+              <option value="sintomas" label="Reporte de síntomas" />
+              <option value="otros" label="Otros" />
+            </select>
+            {errors.complaintType && touched.complaintType && (
+              <div className="input-feedback">{errors.complaintType}</div>
             )}
             <br />
 
