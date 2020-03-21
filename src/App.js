@@ -1,19 +1,33 @@
 // Helper styles for demo
 import "./App.css";
 import { DisplayFormikState } from "./helper";
-import GoogleMapReact from "google-map-react";
+import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
+
 import { usePosition } from "use-position";
 
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
-const App = () => {
+const App = ({ google }) => {
   const { latitude, longitude, timestamp, accuracy, error } = usePosition();
+  const [markerPosition, setMarkerPosition] = useState(null);
 
-  const positionAvailable = latitude && longitude
+  const positionAvailable = latitude && longitude;
+  const mapRef = useRef(null);
+
+  const onMapClicked = (mapProps, map, clickEvent) => {
+    console.log(clickEvent.latLng.lat());
+    console.log(clickEvent.latLng.lng());
+    setMarkerPosition({
+      lat: clickEvent.latLng.lat(),
+      lng: clickEvent.latLng.lng()
+    });
+  };
+
+  useEffect(() => {
+    setMarkerPosition({ lat: latitude, lng: longitude });
+  }, [latitude, longitude]);
 
   return (
     <div className="app">
@@ -182,25 +196,28 @@ const App = () => {
               )}
               <br />
               {positionAvailable && (
-                  <div style={{ height: "100vh", width: "100%" }}>
-                    <GoogleMapReact
-                      bootstrapURLKeys={{
-                        key: ""
-                      }}
-                      defaultCenter={{
-                        lat: latitude,
-                        lng: longitude
-                      }}
-                      defaultZoom={15}
-                    >
-                      <AnyReactComponent
-                        lat={latitude}
-                        lng={longitude}
-                        text="My Marker"
-                      />
-                    </GoogleMapReact>
-                  </div>
-                )}
+                <Map
+                  ref={mapRef}
+                  google={google}
+                  containerStyle={{
+                    height: "40vh",
+                    width: "100%",
+                    position: "relative"
+                  }}
+                  initialCenter={{
+                    lat: latitude,
+                    lng: longitude
+                  }}
+                  onClick={onMapClicked}
+                  zoom={15}
+                >
+                  <Marker
+                    onClick={() => console.log("clicked")}
+                    name={"Current location"}
+                    position={markerPosition}
+                  />
+                </Map>
+              )}
 
               <button
                 type="button"
@@ -223,4 +240,7 @@ const App = () => {
   );
 };
 
-export default App;
+export default GoogleApiWrapper({
+  apiKey: process.env.REACT_APP_GMAPS_API_KEY, // google maps key
+  libraries: ["places"]
+})(App);
