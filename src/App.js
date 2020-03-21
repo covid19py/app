@@ -33,9 +33,7 @@ const validationSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  email: Yup.string()
-    .email("Invalid email")
-    .required("Required")
+  email: Yup.string().email("Invalid email")
 });
 
 const App = ({ google }) => {
@@ -43,51 +41,64 @@ const App = ({ google }) => {
   const [markerPosition, setMarkerPosition] = useState(null);
   const [anonymous, setAnonymous] = useState(false);
   const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
 
   const positionAvailable = latitude && longitude;
   const mapRef = useRef(null);
   const autocomplete = useRef(null);
   const geocoder = useRef(null);
 
-  const onMapClicked = (mapProps, map, e) => {
-    setMarkerPosition({
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng()
+  const callGeocoderAPI = ({ latlng }) => {
+    geocoder.current.geocode({ location: latlng }, function(results, status) {
+      if (status === "OK") {
+        if (results[0]) {
+          setStreet(results[0].formatted_address);
+          const addressComponents = results[0].address_components
+          const city = addressComponents.find(component => {
+            return component.types.find(type => type === "locality")
+          })
+          const country = addressComponents.find(component => {
+            return component.types.find(type => type === "country")
+          })
+          setCity(city.long_name)
+          setCountry(country.long_name)
+        }
+      } else {
+        console.error("Geocoder failed due to: " + status);
+      }
     });
   };
 
   const placeChangedHandler = () => {
     const place = autocomplete.current.getPlace();
     const location = place.geometry.location;
-    const lat = location.lat();
-    const lng = location.lng();
     if (place) {
       const latlng = {
-        lat: parseFloat(lat),
-        lng: parseFloat(lng)
+        lat: parseFloat(location.lat()),
+        lng: parseFloat(location.lng())
       };
-
-      geocoder.current.geocode({ location: latlng }, function(results, status) {
-        if (status === "OK") {
-          if (results[0]) {
-            setStreet(results[0].formatted_address);
-          }
-        } else {
-          console.error("Geocoder failed due to: " + status);
-        }
-      });
-      setMarkerPosition({
-        lat,
-        lng
-      });
+      // callGeocoderAPI({ latlng });
+      setMarkerPosition(latlng);
     }
   };
 
+  const onMapClicked = (mapProps, map, e) => {
+    const latlng = {
+      lat: parseFloat(e.latLng.lat()),
+      lng: parseFloat(e.latLng.lng())
+    };
+    callGeocoderAPI({ latlng });
+    setMarkerPosition(latlng);
+  };
+
   const onDragEndHandler = (mapProps, map, e) => {
-    setMarkerPosition({
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng()
-    });
+    const latlng = {
+      lat: parseFloat(e.latLng.lat()),
+      lng: parseFloat(e.latLng.lng())
+    };
+    callGeocoderAPI({ latlng });
+    setMarkerPosition(latlng);
   };
 
   useEffect(() => {
@@ -366,7 +377,7 @@ const App = ({ google }) => {
                   </Field>
 
                   <Field>
-                    <Label htmlFor="phone">Dirección</Label>
+                    <Label htmlFor="street">Dirección</Label>
                     <Control>
                       <Input
                         id="street"
@@ -383,6 +394,27 @@ const App = ({ google }) => {
                       />
                       {errors.street && touched.street && (
                         <div className="input-feedback">{errors.street}</div>
+                      )}
+                    </Control>
+                  </Field>
+                  <Field>
+                    <Label htmlFor="city">Ciudad</Label>
+                    <Control>
+                      <Input
+                        id="city"
+                        placeholder=""
+                        type="tel"
+                        value={city}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          errors.city && touched.city
+                            ? "text-input error"
+                            : "text-input"
+                        }
+                      />
+                      {errors.city && touched.city && (
+                        <div className="input-feedback">{errors.city}</div>
                       )}
                     </Control>
                   </Field>
