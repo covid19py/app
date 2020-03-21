@@ -238,7 +238,7 @@ const App = ({ google }) => {
                         <Control>
                           <Input
                             id="firstName"
-                            placeholder="Ingresa tu nombre"
+                            placeholder="Nombre del denunciante"
                             type="text"
                             value={values.firstName}
                             onChange={handleChange}
@@ -262,7 +262,7 @@ const App = ({ google }) => {
                         <Control>
                           <Input
                             id="lastName"
-                            placeholder="Ingresa tu apellido"
+                            placeholder="Apellido del denunciante"
                             type="text"
                             value={values.lastName}
                             onChange={handleChange}
@@ -285,7 +285,7 @@ const App = ({ google }) => {
                         <Control>
                           <Input
                             id="phone"
-                            placeholder="Número de celular o línea baja"
+                            placeholder="Número de celular o línea baja del denunciante"
                             type="tel"
                             value={values.phone}
                             onChange={handleChange}
@@ -309,7 +309,7 @@ const App = ({ google }) => {
                     <Control>
                       <Input
                         id="email"
-                        placeholder="Ingresa tu correo eléctronico"
+                        placeholder="Correo electrónico del denunciante"
                         type="email"
                         value={values.email}
                         onChange={handleChange}
