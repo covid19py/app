@@ -218,7 +218,6 @@ const App = ({ google }) => {
                   />
                 </Map>
               )}
-
               <button
                 type="button"
                 className="outline"
