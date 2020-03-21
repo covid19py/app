@@ -8,7 +8,7 @@
             "type": "integer"
         },
         "fecha_actualizacion": {
-            "type": "integer",
+            "type": "integer"
         },
         "canal": {
             "type": "string",
