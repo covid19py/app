@@ -9,7 +9,7 @@ import {
   Select,
   Title,
   Level,
-  Textarea,
+  Textarea
 } from "rbx";
 
 import "./App.css";
@@ -82,6 +82,7 @@ const App = ({ google }) => {
       if (status === "OK") {
         if (results[0]) {
           setStreet(results[0].formatted_address);
+          setFieldValue("street", results[0].formatted_address, true);
           const addressComponents = results[0].address_components;
           const city = addressComponents.find(component => {
             return component.types.find(type => type === "locality");
@@ -91,6 +92,7 @@ const App = ({ google }) => {
           });
           setCity(city.long_name);
           setCountry(country.long_name);
+          setFieldValue("city", city.long_name, true);
         }
       } else {
         console.error("Geocoder failed due to: " + status);
@@ -99,6 +101,7 @@ const App = ({ google }) => {
   };
 
   const placeChangedHandler = () => {
+    //* This only have data when a place is selected from autcomplete dropdown
     try {
       const place = autocomplete.current.getPlace();
       const location = place.geometry.location;
@@ -108,6 +111,7 @@ const App = ({ google }) => {
           lng: parseFloat(location.lng())
         };
         setPlace(place.name);
+        setFieldValue("geo", latlng, true);
         setFieldValue("place", place.name, true);
         callGeocoderAPI({ latlng });
         setMarkerPosition(latlng);
@@ -123,6 +127,7 @@ const App = ({ google }) => {
       lat: parseFloat(e.latLng.lat()),
       lng: parseFloat(e.latLng.lng())
     };
+    setFieldValue("geo", latlng, true);
     callGeocoderAPI({ latlng });
     setMarkerPosition(latlng);
   };
@@ -132,6 +137,7 @@ const App = ({ google }) => {
       lat: parseFloat(e.latLng.lat()),
       lng: parseFloat(e.latLng.lng())
     };
+    setFieldValue("geo", latlng, true);
     callGeocoderAPI({ latlng });
     setMarkerPosition(latlng);
   };
