@@ -124,17 +124,7 @@ const App = ({ google }) => {
     }
   };
 
-  const onMapClicked = (mapProps, map, e) => {
-    const latlng = {
-      lat: parseFloat(e.latLng.lat()),
-      lng: parseFloat(e.latLng.lng())
-    };
-    setFieldValue("geo", latlng, true);
-    callGeocoderAPI({ latlng });
-    setMarkerPosition(latlng);
-  };
-
-  const onDragEndHandler = (mapProps, map, e) => {
+  const markerHandler = (mapProps, map, e) => {
     const latlng = {
       lat: parseFloat(e.latLng.lat()),
       lng: parseFloat(e.latLng.lng())
@@ -458,7 +448,7 @@ const App = ({ google }) => {
                           lng: longitude
                         }}
                         center={markerPosition}
-                        onClick={onMapClicked}
+                        onClick={markerHandler}
                         onReady={fetchPlaces}
                         zoom={15}
                       >
@@ -467,7 +457,7 @@ const App = ({ google }) => {
                           name={"Current location"}
                           position={markerPosition}
                           draggable={true}
-                          onDragend={onDragEndHandler}
+                          onDragend={markerHandler}
                         />
                       </Map>
                     </>
