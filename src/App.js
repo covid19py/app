@@ -38,7 +38,7 @@ const App = ({ google }) => {
       phone: "",
       email: "",
       place: "",
-      complaintType: "",
+      complaintType: "aglomeracion",
       observations: ""
     },
     onSubmit: async values => {
@@ -344,12 +344,7 @@ const App = ({ google }) => {
                   placeholder="Ingresa el lugar"
                   type="text"
                   value={values.place}
-                  onChange={e => {
-                    handleChange(e);
-                    // debugger
-                    // setPlace(val => )
-                    // setFieldValue("place", place, true)
-                  }}
+                  onChange={handleChange}
                   onKeyPress={e => {
                     debugger;
                     e.stopPropagation();
@@ -444,19 +439,6 @@ const App = ({ google }) => {
                 <Label>Loading...</Label>
               )}
             </Field>
-
-            {/* <Field horizontal>
-    <Field.Label size="normal">
-      <Label>Question</Label>
-    </Field.Label>
-    <Field.Body>
-      <Field>
-        <Control>
-          <Textarea placeholder="Explain how we can help you" />
-        </Control>
-      </Field>
-    </Field.Body>
-  </Field> */}
 
             <Field>
               <Label htmlFor="observations">Observaciones</Label>
