@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, send_from_directory, jsonify
 from flask_pymongo import PyMongo, ASCENDING, DESCENDING
+from bson.objectid import ObjectId
 
 from flask_json_schema import JsonSchema
 
@@ -35,6 +36,11 @@ def favicon():
 @app.route('/', methods=['POST'])
 def post():
     req_data = request.get_json()
+    # Cargar coordenadas como Point (GeoJSON)
+    lat = req_data['coordenadas']['lat']
+    lng = req_data['coordenadas']['lng']
+    loc = {'coordinates': [lat, lng], 'type': 'Point'}
+    req_data['coordenadas'] = loc
     mongo.db.denuncias.insert_one(req_data)
     output = {}
     return jsonify(output)
@@ -43,14 +49,24 @@ def post():
 def reporte():
     return render_template('reporte.html')
 
-@app.route("/reporte/denuncias")
+@app.route("/reporte/denuncias", methods=['POST'])
 def reporte_denuncias():
     objects = []
-    for d in mongo.db.denuncias.find({}):
+    geoquery = request.get_json()
+    for d in mongo.db.denuncias.find(
+        {
+            'estado': 'pendiente',
+            'coordenadas': {
+                '$geoWithin': {
+                    '$box': geoquery
+                }
+            },
+        }).sort('_id', ASCENDING):
         ts = d['_id'].generation_time
+        point = d['coordenadas']['coordinates']
         obj = {
             '_id': str(d['_id']),
-            'coordenadas': d['coordenadas'],
+            'coordenadas': point,
             'canal': d['canal'],
             'tipo_denuncia': d['tipo_denuncia'],
             'denunciante': d['nombre'] + ' ' + d['apellido'],
@@ -60,6 +76,15 @@ def reporte_denuncias():
         }
         objects.append(obj)
     return jsonify(objects)
+
+@app.route("/reporte/denuncias/<id>/atendida")
+def denuncia_atendida(id):
+    oid = ObjectId(id)
+    query = {'_id': oid}
+    updates = {'$set': {'estado': 'atendida'}}
+    mongo.db.denuncias.update_one(query, updates)
+    obj = {}
+    return jsonify(obj)
 
 if __name__ == '__main__':
     app.run(debug=True)
