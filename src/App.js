@@ -49,8 +49,8 @@ const App = ({ google }) => {
       complaintType: "",
       observations: ""
     },
-    onSubmit: values => {
-      // await new Promise(resolve => setTimeout(resolve, 500));
+    onSubmit: async values => {
+      await new Promise(resolve => setTimeout(resolve, 500));
       alert(JSON.stringify(values, null, 2));
     },
     validationSchema
@@ -168,14 +168,20 @@ const App = ({ google }) => {
     <Container>
       <Content>
         <div className="app">
-
           <Level>
             <Level.Item textAlign="centered">
               <Title size="3">Gestión de denuncias</Title>
             </Level.Item>
           </Level>
 
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={handleSubmit}
+            onKeyDown={e => {
+              if ((e.charCode || e.keyCode) === 13) {
+                e.preventDefault();
+              }
+            }}
+          >
             <Field>
               <Label htmlFor="usedChannel">Canal de denuncia</Label>
               <Control>
@@ -383,6 +389,10 @@ const App = ({ google }) => {
                     // setPlace(val => )
                     // setFieldValue("place", place, true)
                   }}
+                  onKeyPress={e => {
+                    debugger;
+                    e.stopPropagation();
+                  }}
                   onBlur={handleBlur}
                   className={
                     errors.place && touched.place
@@ -539,6 +549,6 @@ const App = ({ google }) => {
 
 export default GoogleApiWrapper({
   apiKey: process.env.REACT_APP_GMAPS_API_KEY, // google maps key
-  language: 'es-419',
+  language: "es-419",
   libraries: ["places"]
 })(App);
