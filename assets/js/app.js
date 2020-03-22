@@ -40,6 +40,8 @@ $(document).ready(function () {
         $('.detalle_denuncia textarea').text(datos['observaciones'])
         $('.detalle_denuncia #fecha').text(datos['creado'].format('DD/MM/YY HH:mm'))
         marker.setIcon(activeMarkerIcon)
+        map.setCenter(marker.getPosition())
+        map.setZoom(15)
     }
 
     var baseCol = $('.base_col')
