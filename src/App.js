@@ -160,7 +160,7 @@ const App = ({ google }) => {
 
   return (
     <React.Fragment>
-      <Navbar>
+      <Navbar color="primary">
         <Container>
           <Navbar.Brand>
             <Navbar.Item>
@@ -176,7 +176,7 @@ const App = ({ google }) => {
           <Navbar.Menu>
             <Navbar.Segment align="end">
               <Navbar.Item>Inicio</Navbar.Item>
-              <Navbar.Item>Gestión de denuncias</Navbar.Item>
+              <Navbar.Item active>Gestión de denuncias</Navbar.Item>
               <Navbar.Item>Reportes</Navbar.Item>
             </Navbar.Segment>
           </Navbar.Menu>
