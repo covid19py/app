@@ -113,6 +113,7 @@ const App = ({ google }) => {
           lng: parseFloat(location.lng())
         };
         setPlace(place.name);
+        setFieldValue("place", place.name, true)
         callGeocoderAPI({ latlng });
         setMarkerPosition(latlng);
       }
