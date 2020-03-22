@@ -1,4 +1,3 @@
-// Helper styles for demo
 import {
   Content,
   Container,
@@ -11,7 +10,6 @@ import {
   Title,
   Level,
   Textarea,
-  Radio
 } from "rbx";
 
 import "./App.css";
@@ -38,8 +36,14 @@ const App = ({ google }) => {
       phone: "",
       email: "",
       place: "",
+      street: "",
+      neighborhood: "",
+      city: "",
+      department: "",
       complaintType: "aglomeracion",
-      observations: ""
+      observations: "",
+      geo: null,
+      complaintState: "pendiente"
     },
     onSubmit: async values => {
       await new Promise(resolve => setTimeout(resolve, 500));
