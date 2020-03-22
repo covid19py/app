@@ -183,13 +183,6 @@ const App = ({ google }) => {
             </Navbar.Item>
             <Navbar.Burger />
           </Navbar.Brand>
-          <Navbar.Menu>
-            <Navbar.Segment align="end">
-              <Navbar.Item>Inicio</Navbar.Item>
-              <Navbar.Item active>Gestión de denuncias</Navbar.Item>
-              <Navbar.Item>Reportes</Navbar.Item>
-            </Navbar.Segment>
-          </Navbar.Menu>
         </Container>
       </Navbar>
       <Hero>
