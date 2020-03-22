@@ -356,7 +356,6 @@ const App = ({ google }) => {
                   value={values.place}
                   onChange={handleChange}
                   onKeyPress={e => {
-                    debugger;
                     e.stopPropagation();
                   }}
                   onBlur={handleBlur}
