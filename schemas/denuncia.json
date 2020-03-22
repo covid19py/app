@@ -61,8 +61,17 @@
     },
     "coordenadas": {
       "description": "Coordenadas geográficas",
-      "type": "array",
-      "items": [{ "type": "integer" }, { "type": "integer" }]
+      "type": "object",
+      "properties": {
+        "lat": {
+          "description": "Latitud",
+          "type": "number"
+        },
+        "lng": {
+          "description": "Longitud",
+          "type": "number"
+        }
+      }
     },
     "estado": {
       "description": "Estado de la denuncia",
