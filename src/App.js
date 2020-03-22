@@ -25,31 +25,41 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email")
+  correo: Yup.string().email("Invalid email")
 });
 
 const App = ({ google }) => {
   const { latitude, longitude } = usePosition();
   const formik = useFormik({
     initialValues: {
-      usedChannel: "Llamada",
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
+      canal: "Llamada",
+      nombre: "",
+      apellido: "",
+      telefono: "",
+      correo: "",
       place: "",
       street: "",
       neighborhood: "",
       city: "",
       department: "",
-      complaintType: "aglomeracion",
-      observations: "",
-      geo: null,
-      complaintState: "pendiente"
+      tipo_denuncia: "aglomeracion",
+      observaciones: "",
+      coordenadas: null,
+      estado: "pendiente"
     },
-    onSubmit: async values => {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async(values, {resetForm}) => {
+      // await new Promise(resolve => setTimeout(resolve, 500));
+      fetch("/",{
+        method: "post",
+        headers: {"content-type": "application/json"},
+        body: JSON.stringify(values, null, 2)
+      }).then((res) => res.json())
+      .then((data) => {
+        console.log("got",data)
+        resetForm({})
+      })
+      .catch((err) => console.log(err))
+      // alert(JSON.stringify(values, null, 2));
     },
     validationSchema
   });
@@ -113,7 +123,7 @@ const App = ({ google }) => {
           lng: parseFloat(location.lng())
         };
         setPlace(place.name);
-        setFieldValue("geo", latlng, true);
+        setFieldValue("coordenadas", latlng, true);
         setFieldValue("place", place.name, true);
         callGeocoderAPI({ latlng });
         setMarkerPosition(latlng);
@@ -129,7 +139,7 @@ const App = ({ google }) => {
       lat: parseFloat(e.latLng.lat()),
       lng: parseFloat(e.latLng.lng())
     };
-    setFieldValue("geo", latlng, true);
+    setFieldValue("coordenadas", latlng, true);
     callGeocoderAPI({ latlng });
     setMarkerPosition(latlng);
   };
@@ -197,13 +207,13 @@ const App = ({ google }) => {
                 }}
               >
                 <Field>
-                  <Label htmlFor="usedChannel">Canal de denuncia</Label>
+                  <Label htmlFor="canal">Canal de denuncia</Label>
                   <Control>
                     <Select.Container fullwidth>
                       <Select
-                        id="usedChannel"
-                        name="usedChannel"
-                        value={values.usedChannel}
+                        id="canal"
+                        name="canal"
+                        value={values.canal}
                         onChange={handleChange}
                         onBlur={handleBlur}
                       >
@@ -216,7 +226,7 @@ const App = ({ google }) => {
                         >
                           Redes Sociales
                         </Select.Option>
-                        <Select.Option value="email" label="Correo electrónico">
+                        <Select.Option value="correo" label="Correo electrónico">
                           Correo electrónico
                         </Select.Option>
                         <Select.Option value="otros" label="Otros">
@@ -228,100 +238,100 @@ const App = ({ google }) => {
                 </Field>
 
                 <Field>
-                  <Label htmlFor="firstName">Nombre</Label>
+                  <Label htmlFor="nombre">Nombre</Label>
                   <Control>
                     <Input
-                      id="firstName"
+                      id="nombre"
                       placeholder="Nombre del denunciante"
                       type="text"
-                      value={values.firstName}
+                      value={values.nombre}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={
-                        errors.firstName && touched.firstName
+                        errors.nombre && touched.nombre
                           ? "text-input error"
                           : "text-input"
                       }
                     />
-                    {errors.firstName && touched.firstName && (
-                      <div className="input-feedback">{errors.firstName}</div>
+                    {errors.nombre && touched.nombre && (
+                      <div className="input-feedback">{errors.nombre}</div>
                     )}
                   </Control>
                 </Field>
 
                 <Field>
-                  <Label htmlFor="lastName">Apellido</Label>
+                  <Label htmlFor="apellido">Apellido</Label>
                   <Control>
                     <Input
-                      id="lastName"
+                      id="apellido"
                       placeholder="Apellido del denunciante"
                       type="text"
-                      value={values.lastName}
+                      value={values.apellido}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={
-                        errors.lastName && touched.lastName
+                        errors.apellido && touched.apellido
                           ? "text-input error"
                           : "text-input"
                       }
                     />
-                    {errors.lastName && touched.lastName && (
-                      <div className="input-feedback">{errors.lastName}</div>
+                    {errors.apellido && touched.apellido && (
+                      <div className="input-feedback">{errors.apellido}</div>
                     )}
                   </Control>
                 </Field>
                 <Field>
-                  <Label htmlFor="phone">Teléfono</Label>
+                  <Label htmlFor="telefono">Teléfono</Label>
                   <Control>
                     <Input
-                      id="phone"
+                      id="telefono"
                       placeholder="Número de celular o línea baja del denunciante"
                       type="tel"
-                      value={values.phone}
+                      value={values.telefono}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={
-                        errors.phone && touched.phone
+                        errors.telefono && touched.telefono
                           ? "text-input error"
                           : "text-input"
                       }
                     />
-                    {errors.phone && touched.phone && (
-                      <div className="input-feedback">{errors.phone}</div>
+                    {errors.telefono && touched.telefono && (
+                      <div className="input-feedback">{errors.telefono}</div>
                     )}
                   </Control>
                 </Field>
 
                 <Field>
-                  <Label htmlFor="email">Correo electrónico</Label>
+                  <Label htmlFor="correo">Correo electrónico</Label>
                   <Control>
                     <Input
-                      id="email"
+                      id="correo"
                       placeholder="Correo electrónico del denunciante"
                       type="email"
-                      value={values.email}
+                      value={values.correo}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={
-                        errors.email && touched.email
+                        errors.correo && touched.correo
                           ? "text-input error"
                           : "text-input"
                       }
                     />
-                    {errors.email && touched.email && (
-                      <div className="input-feedback">{errors.email}</div>
+                    {errors.correo && touched.correo && (
+                      <div className="input-feedback">{errors.correo}</div>
                     )}
                   </Control>
                 </Field>
 
                 <Field>
-                  <Label htmlFor="complaintType">Tipo de denuncia</Label>
+                  <Label htmlFor="tipo_denuncia">Tipo de denuncia</Label>
                   <Control>
                     <Select.Container fullwidth>
                       <Select
-                        id="complaintType"
-                        name="complaintType"
-                        value={values.complaintType}
+                        id="tipo_denuncia"
+                        name="tipo_denuncia"
+                        value={values.tipo_denuncia}
                         onChange={handleChange}
                         onBlur={handleBlur}
                       >
@@ -354,9 +364,9 @@ const App = ({ google }) => {
                         </Select.Option>
                       </Select>
                     </Select.Container>
-                    {errors.complaintType && touched.complaintType && (
+                    {errors.tipo_denuncia && touched.tipo_denuncia && (
                       <div className="input-feedback">
-                        {errors.complaintType}
+                        {errors.tipo_denuncia}
                       </div>
                     )}
                   </Control>
@@ -462,29 +472,29 @@ const App = ({ google }) => {
                       </Map>
                     </>
                   ) : (
-                    <Label>Loading...</Label>
+                    <Label>Cargando...</Label>
                   )}
                 </Field>
 
                 <Field>
-                  <Label htmlFor="observations">Observaciones</Label>
+                  <Label htmlFor="observaciones">Observaciones</Label>
                   <Control>
                     <Textarea
-                      id="observations"
+                      id="observaciones"
                       placeholder=""
                       type="tel"
-                      value={values.observations}
+                      value={values.observaciones}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={
-                        errors.observations && touched.observations
+                        errors.observaciones && touched.observaciones
                           ? "text-input error"
                           : "text-input"
                       }
                     />
-                    {errors.observations && touched.observations && (
+                    {errors.observaciones && touched.observaciones && (
                       <div className="input-feedback">
-                        {errors.observations}
+                        {errors.observaciones}
                       </div>
                     )}
                   </Control>
@@ -493,7 +503,7 @@ const App = ({ google }) => {
                 <Field kind="group">
                   <Button.Group size="large">
                     <Button rounded color="success" disabled={isSubmitting}>
-                      Submit
+                      Enviar denuncia
                     </Button>
 
                     <Button
@@ -505,7 +515,7 @@ const App = ({ google }) => {
                       onClick={handleReset}
                       disabled={!dirty || isSubmitting}
                     >
-                      Reset
+                      Reestablecer campos
                     </Button>
                   </Button.Group>
                 </Field>
