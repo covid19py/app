@@ -11,7 +11,9 @@ import {
   Textarea,
   Navbar,
   Hero,
-  Column
+  Column,
+  Card,
+  Box
 } from "rbx";
 
 import "./App.css";
@@ -170,331 +172,347 @@ const App = ({ google }) => {
 
   return (
     <React.Fragment>
-      <Navbar color="primary">
-        <Container>
-          <Navbar.Brand>
-            <Navbar.Item>
-              <Title size="2" spaced>
-                Covid19-PY
-              </Title>
-              <Title size="5" subtitle>
-                Sistema de gestión de denuncias y reportes
-              </Title>
-            </Navbar.Item>
-            <Navbar.Burger />
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
       <Hero>
         <Hero.Body>
           <Container>
-            <Column size="8">
+            <Column>
               <Title>Gestión de denuncias</Title>
-
-              <form
-                onSubmit={handleSubmit}
-                onKeyDown={e => {
-                  if ((e.charCode || e.keyCode) === 13) {
-                    e.preventDefault();
-                  }
-                }}
-              >
-                <Field>
-                  <Label htmlFor="canal">Canal de denuncia</Label>
-                  <Control>
-                    <Select.Container fullwidth>
-                      <Select
-                        id="canal"
-                        name="canal"
-                        value={values.canal}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      >
-                        <Select.Option value="llamada" label="Llamada">
-                          Llamada
-                        </Select.Option>
-                        <Select.Option
-                          value="redes_sociales"
-                          label="Redes Sociales"
-                        >
-                          Redes Sociales
-                        </Select.Option>
-                        <Select.Option value="correo" label="Correo electrónico">
-                          Correo electrónico
-                        </Select.Option>
-                        <Select.Option value="otros" label="Otros">
-                          Redes Sociales
-                        </Select.Option>
-                      </Select>
-                    </Select.Container>
-                  </Control>
+            </Column>
+          </Container>
+          <Container as="form" 
+              onSubmit={handleSubmit}
+              onKeyDown={e => {
+                if ((e.charCode || e.keyCode) === 13) {
+                  e.preventDefault();
+                }
+              }}
+          >
+          <Column></Column>
+          <Column>
+          
+                <Box>
+                <Field horizontal>
+                  <Field.Body>
+                    <Field>
+                    <Label htmlFor="canal">Canal de denuncia</Label>
+                      <Control>
+                        <Select.Container fullwidth>
+                          <Select
+                            id="canal"
+                            name="canal"
+                            value={values.canal}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          >
+                            <Select.Option value="llamada" label="Llamada">
+                              Llamada
+                            </Select.Option>
+                            <Select.Option
+                              value="redes_sociales"
+                              label="Redes Sociales"
+                            >
+                              Redes Sociales
+                            </Select.Option>
+                            <Select.Option value="correo" label="Correo electrónico">
+                              Correo electrónico
+                            </Select.Option>
+                            <Select.Option value="otros" label="Otros">
+                              Redes Sociales
+                            </Select.Option>
+                          </Select>
+                        </Select.Container>
+                      </Control>
+                    </Field>
+                    <Field>
+                      <Label htmlFor="tipo_denuncia">Tipo de denuncia</Label>
+                      <Control>
+                        <Select.Container fullwidth>
+                          <Select
+                            id="tipo_denuncia"
+                            name="tipo_denuncia"
+                            value={values.tipo_denuncia}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          >
+                            <Select.Option
+                              value="aglomeracion"
+                              label="Aglomeración en espacio público"
+                            >
+                              Aglomeración en espacio público
+                            </Select.Option>
+                            <Select.Option
+                              value="medidas_sanitarias"
+                              label="Incumplimiento de medidas sanitarias"
+                            >
+                              Incumplimiento de medidas sanitarias
+                            </Select.Option>
+                            <Select.Option
+                              value="cuarentena"
+                              label="Incumplimiento de cuarentena"
+                            >
+                              Incumplimiento de cuarentena
+                            </Select.Option>
+                            <Select.Option
+                              value="sintomas"
+                              label="Reporte de síntomas"
+                            >
+                              Reporte de síntomas
+                            </Select.Option>
+                            <Select.Option value="otros" label="Otros">
+                              Otros
+                            </Select.Option>
+                          </Select>
+                        </Select.Container>
+                        {errors.tipo_denuncia && touched.tipo_denuncia && (
+                          <div className="input-feedback">
+                            {errors.tipo_denuncia}
+                          </div>
+                        )}
+                      </Control>
+                    </Field>
+                  </Field.Body>
                 </Field>
-
-                <Field>
-                  <Label htmlFor="nombre">Nombre</Label>
-                  <Control>
-                    <Input
-                      id="nombre"
-                      placeholder="Nombre del denunciante"
-                      type="text"
-                      value={values.nombre}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={
-                        errors.nombre && touched.nombre
-                          ? "text-input error"
-                          : "text-input"
-                      }
-                    />
-                    {errors.nombre && touched.nombre && (
-                      <div className="input-feedback">{errors.nombre}</div>
-                    )}
-                  </Control>
-                </Field>
-
-                <Field>
-                  <Label htmlFor="apellido">Apellido</Label>
-                  <Control>
-                    <Input
-                      id="apellido"
-                      placeholder="Apellido del denunciante"
-                      type="text"
-                      value={values.apellido}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={
-                        errors.apellido && touched.apellido
-                          ? "text-input error"
-                          : "text-input"
-                      }
-                    />
-                    {errors.apellido && touched.apellido && (
-                      <div className="input-feedback">{errors.apellido}</div>
-                    )}
-                  </Control>
-                </Field>
-                <Field>
-                  <Label htmlFor="telefono">Teléfono</Label>
-                  <Control>
-                    <Input
-                      id="telefono"
-                      placeholder="Número de celular o línea baja del denunciante"
-                      type="tel"
-                      value={values.telefono}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={
-                        errors.telefono && touched.telefono
-                          ? "text-input error"
-                          : "text-input"
-                      }
-                    />
-                    {errors.telefono && touched.telefono && (
-                      <div className="input-feedback">{errors.telefono}</div>
-                    )}
-                  </Control>
-                </Field>
-
-                <Field>
-                  <Label htmlFor="correo">Correo electrónico</Label>
-                  <Control>
-                    <Input
-                      id="correo"
-                      placeholder="Correo electrónico del denunciante"
-                      type="email"
-                      value={values.correo}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={
-                        errors.correo && touched.correo
-                          ? "text-input error"
-                          : "text-input"
-                      }
-                    />
-                    {errors.correo && touched.correo && (
-                      <div className="input-feedback">{errors.correo}</div>
-                    )}
-                  </Control>
-                </Field>
-
-                <Field>
-                  <Label htmlFor="tipo_denuncia">Tipo de denuncia</Label>
-                  <Control>
-                    <Select.Container fullwidth>
-                      <Select
-                        id="tipo_denuncia"
-                        name="tipo_denuncia"
-                        value={values.tipo_denuncia}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      >
-                        <Select.Option
-                          value="aglomeracion"
-                          label="Aglomeración en espacio público"
-                        >
-                          Aglomeración en espacio público
-                        </Select.Option>
-                        <Select.Option
-                          value="medidas_sanitarias"
-                          label="Incumplimiento de medidas sanitarias"
-                        >
-                          Incumplimiento de medidas sanitarias
-                        </Select.Option>
-                        <Select.Option
-                          value="cuarentena"
-                          label="Incumplimiento de cuarentena"
-                        >
-                          Incumplimiento de cuarentena
-                        </Select.Option>
-                        <Select.Option
-                          value="sintomas"
-                          label="Reporte de síntomas"
-                        >
-                          Reporte de síntomas
-                        </Select.Option>
-                        <Select.Option value="otros" label="Otros">
-                          Otros
-                        </Select.Option>
-                      </Select>
-                    </Select.Container>
-                    {errors.tipo_denuncia && touched.tipo_denuncia && (
-                      <div className="input-feedback">
-                        {errors.tipo_denuncia}
-                      </div>
-                    )}
-                  </Control>
-                </Field>
-
-                <Field>
-                  <Label htmlFor="place">Lugar</Label>
-                  <Control>
-                    <Input
-                      id="place"
-                      ref={autocompleteEl}
-                      placeholder="Ingresa el lugar"
-                      type="text"
-                      value={values.place}
-                      onChange={handleChange}
-                      onKeyPress={e => {
-                        e.stopPropagation();
-                      }}
-                      onBlur={handleBlur}
-                      className={
-                        errors.place && touched.place
-                          ? "text-input error"
-                          : "text-input"
-                      }
-                    />
-                    {errors.place && touched.place && (
-                      <div className="input-feedback">{errors.place}</div>
-                    )}
-                  </Control>
-                </Field>
-
-                <Field>
-                  <Label htmlFor="street">Dirección</Label>
-                  <Control>
-                    <Input
-                      id="street"
-                      placeholder=""
-                      type="tel"
-                      value={street}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={
-                        errors.street && touched.street
-                          ? "text-input error"
-                          : "text-input"
-                      }
-                    />
-                    {errors.street && touched.street && (
-                      <div className="input-feedback">{errors.street}</div>
-                    )}
-                  </Control>
-                </Field>
-                <Field>
-                  <Label htmlFor="city">Ciudad</Label>
-                  <Control>
-                    <Input
-                      id="city"
-                      placeholder=""
-                      type="tel"
-                      value={city}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={
-                        errors.city && touched.city
-                          ? "text-input error"
-                          : "text-input"
-                      }
-                    />
-                    {errors.city && touched.city && (
-                      <div className="input-feedback">{errors.city}</div>
-                    )}
-                  </Control>
-                </Field>
-
-                <Field>
-                  {positionAvailable ? (
-                    <>
-                      <Label htmlFor="complaintType">Ubicación</Label>
-                      <Map
-                        ref={mapRef}
-                        google={google}
-                        containerStyle={{
-                          height: "40vh",
-                          width: "100%",
-                          position: "relative"
-                        }}
-                        initialCenter={{
-                          lat: latitude,
-                          lng: longitude
-                        }}
-                        center={markerPosition}
-                        onClick={markerHandler}
-                        onReady={fetchPlaces}
-                        zoom={15}
-                      >
-                        <Marker
-                          onClick={() => console.log("clicked")}
-                          name={"Current location"}
-                          position={markerPosition}
-                          draggable={true}
-                          onDragend={markerHandler}
+                </Box>
+                
+                <Box>
+                <Field horizontal>
+                  <Field.Body>
+                    <Field>
+                    <Label htmlFor="nombre">Nombre</Label>
+                      <Control>
+                        <Input
+                          id="nombre"
+                          placeholder="Nombre del denunciante"
+                          type="text"
+                          value={values.nombre}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={
+                            errors.nombre && touched.nombre
+                              ? "text-input error"
+                              : "text-input"
+                          }
                         />
-                      </Map>
-                    </>
-                  ) : (
-                    <Label>Cargando...</Label>
-                  )}
+                        {errors.nombre && touched.nombre && (
+                          <div className="input-feedback">{errors.nombre}</div>
+                        )}
+                      </Control>
+                    </Field>
+                    <Field>
+                    <Label htmlFor="apellido">Apellido</Label>
+                      <Control>
+                        <Input
+                          id="apellido"
+                          placeholder="Apellido del denunciante"
+                          type="text"
+                          value={values.apellido}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={
+                            errors.apellido && touched.apellido
+                              ? "text-input error"
+                              : "text-input"
+                          }
+                        />
+                        {errors.apellido && touched.apellido && (
+                          <div className="input-feedback">{errors.apellido}</div>
+                        )}
+                      </Control>
+                    </Field>
+                  </Field.Body>
                 </Field>
+                </Box>
 
-                <Field>
-                  <Label htmlFor="observaciones">Observaciones</Label>
-                  <Control>
-                    <Textarea
-                      id="observaciones"
-                      placeholder=""
-                      type="tel"
-                      value={values.observaciones}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={
-                        errors.observaciones && touched.observaciones
-                          ? "text-input error"
-                          : "text-input"
-                      }
-                    />
-                    {errors.observaciones && touched.observaciones && (
-                      <div className="input-feedback">
-                        {errors.observaciones}
-                      </div>
-                    )}
-                  </Control>
-                </Field>
+                <Box>
+                <Field horizontal>
+                  <Field.Body>
+                    <Field>
+                    <Label htmlFor="telefono">Teléfono</Label>
+                      <Control>
+                        <Input
+                          id="telefono"
+                          placeholder="Número de celular o línea baja del denunciante"
+                          type="tel"
+                          value={values.telefono}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={
+                            errors.telefono && touched.telefono
+                              ? "text-input error"
+                              : "text-input"
+                          }
+                        />
+                        {errors.telefono && touched.telefono && (
+                          <div className="input-feedback">{errors.telefono}</div>
+                        )}
+                      </Control>
+                    </Field>
+                    <Field>
+                    <Label htmlFor="correo">Correo electrónico</Label>
+                      <Control>
+                        <Input
+                          id="correo"
+                          placeholder="Correo electrónico del denunciante"
+                          type="email"
+                          value={values.correo}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={
+                            errors.correo && touched.correo
+                              ? "text-input error"
+                              : "text-input"
+                          }
+                        />
+                        {errors.correo && touched.correo && (
+                          <div className="input-feedback">{errors.correo}</div>
+                        )}
+                      </Control>
+                    </Field>
+                  </Field.Body>
+                </Field>   
+                </Box>
 
+                <Box>
+                    <Field>
+                      <Label htmlFor="place">Lugar</Label>
+                      <Control>
+                        <Input
+                          id="place"
+                          ref={autocompleteEl}
+                          placeholder="Ingresa el lugar"
+                          type="text"
+                          value={values.place}
+                          onChange={handleChange}
+                          onKeyPress={e => {
+                            e.stopPropagation();
+                          }}
+                          onBlur={handleBlur}
+                          className={
+                            errors.place && touched.place
+                              ? "text-input error"
+                              : "text-input"
+                          }
+                        />
+                        {errors.place && touched.place && (
+                          <div className="input-feedback">{errors.place}</div>
+                        )}
+                      </Control>
+                    </Field>
+                </Box>
+
+                <Box>
+                    <Field>
+                      <Label htmlFor="street">Dirección</Label>
+                      <Control>
+                        <Input
+                          id="street"
+                          placeholder=""
+                          type="tel"
+                          value={street}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={
+                            errors.street && touched.street
+                              ? "text-input error"
+                              : "text-input"
+                          }
+                        />
+                        {errors.street && touched.street && (
+                          <div className="input-feedback">{errors.street}</div>
+                        )}
+                      </Control>
+                    </Field>
+                </Box>
+
+                <Box>
+                    <Field>
+                      <Label htmlFor="city">Ciudad</Label>
+                      <Control>
+                        <Input
+                          id="city"
+                          placeholder=""
+                          type="tel"
+                          value={city}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={
+                            errors.city && touched.city
+                              ? "text-input error"
+                              : "text-input"
+                          }
+                        />
+                        {errors.city && touched.city && (
+                          <div className="input-feedback">{errors.city}</div>
+                        )}
+                      </Control>
+                    </Field>
+                </Box>
+
+                <Box>
+                    <Field>
+                      {positionAvailable ? (
+                        <>
+                          <Label htmlFor="complaintType">Ubicación</Label>
+                          <Map
+                            ref={mapRef}
+                            google={google}
+                            containerStyle={{
+                              height: "40vh",
+                              width: "100%",
+                              position: "relative"
+                            }}
+                            initialCenter={{
+                              lat: latitude,
+                              lng: longitude
+                            }}
+                            center={markerPosition}
+                            onClick={markerHandler}
+                            onReady={fetchPlaces}
+                            zoom={15}
+                          >
+                            <Marker
+                              onClick={() => console.log("clicked")}
+                              name={"Current location"}
+                              position={markerPosition}
+                              draggable={true}
+                              onDragend={markerHandler}
+                            />
+                          </Map>
+                        </>
+                      ) : (
+                        <Label>Cargando...</Label>
+                      )}
+                    </Field>
+                </Box>
+
+                <Box>
+                    <Field>
+                      <Label htmlFor="observaciones">Observaciones</Label>
+                      <Control>
+                        <Textarea
+                          id="observaciones"
+                          placeholder=""
+                          type="tel"
+                          value={values.observaciones}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={
+                            errors.observaciones && touched.observaciones
+                              ? "text-input error"
+                              : "text-input"
+                          }
+                        />
+                        {errors.observaciones && touched.observaciones && (
+                          <div className="input-feedback">
+                            {errors.observaciones}
+                          </div>
+                        )}
+                      </Control>
+                    </Field>
+                </Box>
+                <Column>
                 <Field kind="group">
-                  <Button.Group size="large">
+                  <Button.Group size="medium">
                     <Button rounded color="success" disabled={isSubmitting}>
                       Enviar denuncia
                     </Button>
@@ -512,12 +530,14 @@ const App = ({ google }) => {
                     </Button>
                   </Button.Group>
                 </Field>
+                </Column>
 
                 {process.env.NODE_ENV !== "production" && (
                   <DisplayFormikState {...formik} />
                 )}
-              </form>
+              
             </Column>
+            <Column></Column>
           </Container>
         </Hero.Body>
       </Hero>
