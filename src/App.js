@@ -287,6 +287,7 @@ const App = ({ google }) => {
                           value={values.nombre}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          autoComplete="off"
                           className={
                             errors.nombre && touched.nombre
                               ? "text-input error"
@@ -308,6 +309,7 @@ const App = ({ google }) => {
                           value={values.apellido}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          autoComplete="off"
                           className={
                             errors.apellido && touched.apellido
                               ? "text-input error"
@@ -336,6 +338,7 @@ const App = ({ google }) => {
                           value={values.telefono}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          autoComplete="off"
                           className={
                             errors.telefono && touched.telefono
                               ? "text-input error"
@@ -357,6 +360,7 @@ const App = ({ google }) => {
                           value={values.correo}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                          autoComplete="off"
                           className={
                             errors.correo && touched.correo
                               ? "text-input error"
