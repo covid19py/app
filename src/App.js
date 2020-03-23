@@ -154,7 +154,7 @@ const App = ({ google }) => {
     const { google } = mapProps;
 
     const options = {
-      types: ["establishment"],
+      types: [],
       componentRestrictions: { country: "py" }
     };
 
