@@ -34,7 +34,7 @@ class CustomForm extends React.Component {
     super(props);
   }
   renderField(field) {
-    switch(field.type) {
+    switch (field.type) {
       case "checkbox":
         return <Checkbox />;
       case "text":
@@ -45,11 +45,11 @@ class CustomForm extends React.Component {
   }
   render() {
     const fields = this.props.customFields[this.props.tipoDenuncia];
-    if(fields == null) {
+    if (fields == null) {
       return (null);
     }
     const sections = fields["sections"];
-    if(sections == null) {
+    if (sections == null) {
       return (null);
     }
     return sections.map((type, index) =>
@@ -60,7 +60,7 @@ class CustomForm extends React.Component {
             <Field horizontal key={field.name}>
               <Label>{field.name}</Label>
               <Control>
-              {this.renderField(field)}
+                {this.renderField(field)}
               </Control>
             </Field>
           )
@@ -75,7 +75,13 @@ const validationSchema = Yup.object().shape({
 });
 
 const App = ({ google }) => {
-  const { latitude, longitude } = usePosition();
+
+  let { latitude, longitude, error } = usePosition();
+  if (error !== null) {
+    latitude = -25.2966808;
+    longitude = -57.6683016;
+  }
+
   const formik = useFormik({
     initialValues: {
       canal: "Llamada",
@@ -93,18 +99,18 @@ const App = ({ google }) => {
       coordenadas: null,
       estado: "pendiente"
     },
-    onSubmit: async(values, {resetForm}) => {
+    onSubmit: async (values, { resetForm }) => {
       // await new Promise(resolve => setTimeout(resolve, 500));
-      fetch("/",{
+      fetch("/", {
         method: "post",
-        headers: {"content-type": "application/json"},
+        headers: { "content-type": "application/json" },
         body: JSON.stringify(values, null, 2)
       }).then((res) => res.json())
-      .then((data) => {
-        console.log("got",data)
-        resetForm({values: ""})
-      })
-      .catch((err) => console.log(err))
+        .then((data) => {
+          console.log("got", data)
+          resetForm({ values: "" })
+        })
+        .catch((err) => console.log(err))
       // alert(JSON.stringify(values, null, 2));
     },
     validationSchema
@@ -136,7 +142,7 @@ const App = ({ google }) => {
   const autocompleteEl = useRef(null);
 
   const callGeocoderAPI = ({ latlng }) => {
-    geocoder.current.geocode({ location: latlng }, function(results, status) {
+    geocoder.current.geocode({ location: latlng }, function (results, status) {
       if (status === "OK") {
         if (results[0]) {
           setStreet(results[0].formatted_address);
@@ -223,22 +229,20 @@ const App = ({ google }) => {
               <Title>Gestión de denuncias</Title>
             </Column>
           </Container>
-          <Container as="form" 
-              onSubmit={handleSubmit}
-              onKeyDown={e => {
-                if ((e.charCode || e.keyCode) === 13) {
-                  e.preventDefault();
-                }
-              }}
+          <Container as="form"
+            onSubmit={handleSubmit}
+            onKeyDown={e => {
+              if ((e.charCode || e.keyCode) === 13) {
+                e.preventDefault();
+              }
+            }}
           >
-          <Column></Column>
-          <Column>
-          
-                <Box>
+            <Column>
+              <Box>
                 <Field horizontal>
                   <Field.Body>
                     <Field>
-                    <Label htmlFor="canal">Canal de denuncia</Label>
+                      <Label htmlFor="canal">Canal de denuncia</Label>
                       <Control>
                         <Select.Container fullwidth>
                           <Select
@@ -316,15 +320,15 @@ const App = ({ google }) => {
                     </Field>
                   </Field.Body>
                 </Field>
-                </Box>
-                <Box>
-                  <CustomForm tipoDenuncia={values.tipo_denuncia} customFields={customFields} />
-                </Box>
-                <Box>
+              </Box>
+              <Box>
+                <CustomForm tipoDenuncia={values.tipo_denuncia} customFields={customFields} />
+              </Box>
+              <Box>
                 <Field horizontal>
                   <Field.Body>
                     <Field>
-                    <Label htmlFor="nombre">Nombre</Label>
+                      <Label htmlFor="nombre">Nombre</Label>
                       <Control>
                         <Input
                           id="nombre"
@@ -346,7 +350,7 @@ const App = ({ google }) => {
                       </Control>
                     </Field>
                     <Field>
-                    <Label htmlFor="apellido">Apellido</Label>
+                      <Label htmlFor="apellido">Apellido</Label>
                       <Control>
                         <Input
                           id="apellido"
@@ -369,13 +373,13 @@ const App = ({ google }) => {
                     </Field>
                   </Field.Body>
                 </Field>
-                </Box>
+              </Box>
 
-                <Box>
+              <Box>
                 <Field horizontal>
                   <Field.Body>
                     <Field>
-                    <Label htmlFor="telefono">Teléfono</Label>
+                      <Label htmlFor="telefono">Teléfono</Label>
                       <Control>
                         <Input
                           id="telefono"
@@ -397,7 +401,7 @@ const App = ({ google }) => {
                       </Control>
                     </Field>
                     <Field>
-                    <Label htmlFor="correo">Correo electrónico</Label>
+                      <Label htmlFor="correo">Correo electrónico</Label>
                       <Control>
                         <Input
                           id="correo"
@@ -419,148 +423,148 @@ const App = ({ google }) => {
                       </Control>
                     </Field>
                   </Field.Body>
-                </Field>   
-                </Box>
+                </Field>
+              </Box>
 
-                <Box>
-                    <Field>
-                      <Label htmlFor="place">Lugar</Label>
-                      <Control>
-                        <Input
-                          id="place"
-                          ref={autocompleteEl}
-                          placeholder="Ingresa el lugar"
-                          type="text"
-                          value={values.place}
-                          onChange={handleChange}
-                          onKeyPress={e => {
-                            e.stopPropagation();
-                          }}
-                          onBlur={handleBlur}
-                          className={
-                            errors.place && touched.place
-                              ? "text-input error"
-                              : "text-input"
-                          }
+              <Box>
+                <Field>
+                  <Label htmlFor="place">Lugar</Label>
+                  <Control>
+                    <Input
+                      id="place"
+                      ref={autocompleteEl}
+                      placeholder="Ingresa el lugar"
+                      type="text"
+                      value={values.place}
+                      onChange={handleChange}
+                      onKeyPress={e => {
+                        e.stopPropagation();
+                      }}
+                      onBlur={handleBlur}
+                      className={
+                        errors.place && touched.place
+                          ? "text-input error"
+                          : "text-input"
+                      }
+                    />
+                    {errors.place && touched.place && (
+                      <div className="input-feedback">{errors.place}</div>
+                    )}
+                  </Control>
+                </Field>
+              </Box>
+
+              <Box>
+                <Field>
+                  <Label htmlFor="street">Dirección</Label>
+                  <Control>
+                    <Input
+                      id="street"
+                      placeholder=""
+                      type="tel"
+                      value={street}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.street && touched.street
+                          ? "text-input error"
+                          : "text-input"
+                      }
+                    />
+                    {errors.street && touched.street && (
+                      <div className="input-feedback">{errors.street}</div>
+                    )}
+                  </Control>
+                </Field>
+              </Box>
+
+              <Box>
+                <Field>
+                  <Label htmlFor="city">Ciudad</Label>
+                  <Control>
+                    <Input
+                      id="city"
+                      placeholder=""
+                      type="tel"
+                      value={city}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.city && touched.city
+                          ? "text-input error"
+                          : "text-input"
+                      }
+                    />
+                    {errors.city && touched.city && (
+                      <div className="input-feedback">{errors.city}</div>
+                    )}
+                  </Control>
+                </Field>
+              </Box>
+
+              <Box>
+                <Field>
+                  {positionAvailable ? (
+                    <>
+                      <Label htmlFor="complaintType">Ubicación</Label>
+                      <Map
+                        ref={mapRef}
+                        google={google}
+                        containerStyle={{
+                          height: "40vh",
+                          width: "100%",
+                          position: "relative"
+                        }}
+                        initialCenter={{
+                          lat: latitude,
+                          lng: longitude
+                        }}
+                        center={markerPosition}
+                        onClick={markerHandler}
+                        onReady={fetchPlaces}
+                        zoom={15}
+                      >
+                        <Marker
+                          onClick={() => console.log("clicked")}
+                          name={"Current location"}
+                          position={markerPosition}
+                          draggable={true}
+                          onDragend={markerHandler}
                         />
-                        {errors.place && touched.place && (
-                          <div className="input-feedback">{errors.place}</div>
-                        )}
-                      </Control>
-                    </Field>
-                </Box>
+                      </Map>
+                    </>
+                  ) : (
+                      <Label>Cargando...</Label>
+                    )}
+                </Field>
+              </Box>
 
-                <Box>
-                    <Field>
-                      <Label htmlFor="street">Dirección</Label>
-                      <Control>
-                        <Input
-                          id="street"
-                          placeholder=""
-                          type="tel"
-                          value={street}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={
-                            errors.street && touched.street
-                              ? "text-input error"
-                              : "text-input"
-                          }
-                        />
-                        {errors.street && touched.street && (
-                          <div className="input-feedback">{errors.street}</div>
-                        )}
-                      </Control>
-                    </Field>
-                </Box>
-
-                <Box>
-                    <Field>
-                      <Label htmlFor="city">Ciudad</Label>
-                      <Control>
-                        <Input
-                          id="city"
-                          placeholder=""
-                          type="tel"
-                          value={city}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={
-                            errors.city && touched.city
-                              ? "text-input error"
-                              : "text-input"
-                          }
-                        />
-                        {errors.city && touched.city && (
-                          <div className="input-feedback">{errors.city}</div>
-                        )}
-                      </Control>
-                    </Field>
-                </Box>
-
-                <Box>
-                    <Field>
-                      {positionAvailable ? (
-                        <>
-                          <Label htmlFor="complaintType">Ubicación</Label>
-                          <Map
-                            ref={mapRef}
-                            google={google}
-                            containerStyle={{
-                              height: "40vh",
-                              width: "100%",
-                              position: "relative"
-                            }}
-                            initialCenter={{
-                              lat: latitude,
-                              lng: longitude
-                            }}
-                            center={markerPosition}
-                            onClick={markerHandler}
-                            onReady={fetchPlaces}
-                            zoom={15}
-                          >
-                            <Marker
-                              onClick={() => console.log("clicked")}
-                              name={"Current location"}
-                              position={markerPosition}
-                              draggable={true}
-                              onDragend={markerHandler}
-                            />
-                          </Map>
-                        </>
-                      ) : (
-                        <Label>Cargando...</Label>
-                      )}
-                    </Field>
-                </Box>
-
-                <Box>
-                    <Field>
-                      <Label htmlFor="observaciones">Observaciones</Label>
-                      <Control>
-                        <Textarea
-                          id="observaciones"
-                          placeholder=""
-                          type="tel"
-                          value={values.observaciones}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={
-                            errors.observaciones && touched.observaciones
-                              ? "text-input error"
-                              : "text-input"
-                          }
-                        />
-                        {errors.observaciones && touched.observaciones && (
-                          <div className="input-feedback">
-                            {errors.observaciones}
-                          </div>
-                        )}
-                      </Control>
-                    </Field>
-                </Box>
-                <Column>
+              <Box>
+                <Field>
+                  <Label htmlFor="observaciones">Observaciones</Label>
+                  <Control>
+                    <Textarea
+                      id="observaciones"
+                      placeholder=""
+                      type="tel"
+                      value={values.observaciones}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.observaciones && touched.observaciones
+                          ? "text-input error"
+                          : "text-input"
+                      }
+                    />
+                    {errors.observaciones && touched.observaciones && (
+                      <div className="input-feedback">
+                        {errors.observaciones}
+                      </div>
+                    )}
+                  </Control>
+                </Field>
+              </Box>
+              <Column>
                 <Field kind="group">
                   <Button.Group size="medium">
                     <Button rounded color="success" disabled={isSubmitting}>
@@ -580,12 +584,12 @@ const App = ({ google }) => {
                     </Button>
                   </Button.Group>
                 </Field>
-                </Column>
+              </Column>
 
-                {process.env.NODE_ENV !== "production" && (
-                  <DisplayFormikState {...formik} />
-                )}
-              
+              {process.env.NODE_ENV !== "production" && (
+                <DisplayFormikState {...formik} />
+              )}
+
             </Column>
             <Column></Column>
           </Container>
