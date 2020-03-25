@@ -3,6 +3,7 @@ import {
   Container,
   Field,
   Control,
+  Checkbox,
   Label,
   Input,
   Button,
@@ -13,8 +14,7 @@ import {
   Hero,
   Column,
   Card,
-  Box,
-  Radio
+  Box
 } from "rbx";
 
 import "./App.css";
@@ -27,15 +27,55 @@ import React, { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+import customFields from "./customFields.json";
+
+class CustomForm extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  renderField(field) {
+    switch(field.type) {
+      case "checkbox":
+        return <Checkbox />;
+      case "text":
+        return <Input type="text" />
+      default:
+        return (null);
+    }
+  }
+  render() {
+    const fields = this.props.customFields[this.props.tipoDenuncia];
+    if(fields == null) {
+      return (null);
+    }
+    const sections = fields["sections"];
+    if(sections == null) {
+      return (null);
+    }
+    return sections.map((type, index) =>
+      <div key={index}>
+        <Label>{sections[index].name}</Label>
+        {
+          sections[index].fields.map((field, fieldIndex) =>
+            <Field horizontal key={field.name}>
+              <Label>{field.name}</Label>
+              <Control>
+              {this.renderField(field)}
+              </Control>
+            </Field>
+          )
+        }
+      </div>
+    );
+  }
+};
+
 const validationSchema = Yup.object().shape({
   correo: Yup.string().email("Invalid email")
 });
 
 const App = ({ google }) => {
-//-25.2968361,-57.668129
-
   const { latitude, longitude } = usePosition();
-
   const formik = useFormik({
     initialValues: {
       canal: "Llamada",
@@ -245,13 +285,13 @@ const App = ({ google }) => {
                               Aglomeración en espacio público
                             </Select.Option>
                             <Select.Option
-                              value="medidas_sanitarias"
+                              value="incumplimiento_medidas_sanitarias"
                               label="Incumplimiento de medidas sanitarias"
                             >
                               Incumplimiento de medidas sanitarias
                             </Select.Option>
                             <Select.Option
-                              value="cuarentena"
+                              value="incumplimiento_cuarentena"
                               label="Incumplimiento de cuarentena"
                             >
                               Incumplimiento de cuarentena
@@ -277,75 +317,9 @@ const App = ({ google }) => {
                   </Field.Body>
                 </Field>
                 </Box>
-                
-                {values.tipo_denuncia == "medidas_sanitarias" && (
-                  <Box>
-                  <Field>
-                    <Label htmlFor="detalle_tipo_acceso">Acceso al local</Label>
-                    <Control>
-                      <label>
-                        <input
-                          type="radio"
-                          id="detalle_tipo_acceso"
-                          checked={values.detalle_tipo_acceso === "lavaderos"}
-                          onChange={() => setFieldValue("detalle_tipo_acceso", "lavaderos")}
-                          onBlur={handleBlur}/> tienen lavaderos de manos con jabón de coco o pulverizador con alcohol hidrolizado.
-                      </label><br/>
-                      <label>
-                        <input
-                          type="radio"
-                          id="detalle_tipo_acceso"
-                          checked={values.detalle_tipo_acceso === "toma_temperatura"}
-                          onChange={() => setFieldValue("detalle_tipo_acceso", "toma_temperatura")}
-                          onBlur={handleBlur}/> se toma la temperatura del personal ingresante.
-                      </label><br/>                      
-                      <label>
-                        <input
-                          type="radio"
-                          id="detalle_tipo_acceso"
-                          checked={values.detalle_tipo_acceso === "registro_temperatura"}
-                          onChange={() => setFieldValue("detalle_tipo_acceso", "registro_temperatura")}
-                          onBlur={handleBlur}/> se toma la temperatura del personal ingresante.
-                      </label><br/>                      
-                      <label>
-                        <input
-                          type="radio"
-                          id="detalle_tipo_acceso"
-                          checked={values.detalle_tipo_acceso === "tapaboca"}
-                          onChange={() => setFieldValue("detalle_tipo_acceso", "tapaboca")}
-                          onBlur={handleBlur}/> el personal llega e ingresa con tapabocas.
-                      </label><br/>                      
-                      <label>
-                        <input
-                          type="radio"
-                          id="detalle_tipo_acceso"
-                          checked={values.detalle_tipo_acceso === "desinfecta"}
-                          onChange={() => setFieldValue("detalle_tipo_acceso", "desinfecta")}
-                          onBlur={handleBlur}/> se desinfecta al personal rociandolo con pulverizador de alcohol hidrolizado.
-                      </label>
-                      <br/><br/>
-                      <Label htmlFor="detalle_tipo_dentro">Dentro del local</Label>
-                      <label>
-                        <input
-                          type="radio"
-                          id="detalle_tipo_dentro"
-                          checked={values.detalle_tipo_dentro === "distancia"}
-                          onChange={() => setFieldValue("detalle_tipo_dentro", "distancia")}
-                          onBlur={handleBlur}/> se respeta la distancia de 2 metros entre empleados.
-                      </label><br/>
-                      <label>
-                        <input
-                          type="radio"
-                          id="detalle_tipo_dentro"
-                          checked={values.detalle_tipo_dentro === "alcohol_gel"}
-                          onChange={() => setFieldValue("detalle_tipo_dentro", "alcohol_gel")}
-                          onBlur={handleBlur}/> a cada empleado se proporciona alcohol en gel.
-                      </label><br/>
-                    </Control>
-                  </Field>
-              </Box>
-                )}
-
+                <Box>
+                  <CustomForm tipoDenuncia={values.tipo_denuncia} customFields={customFields} />
+                </Box>
                 <Box>
                 <Field horizontal>
                   <Field.Body>

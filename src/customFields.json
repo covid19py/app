@@ -1,0 +1,63 @@
+{
+    "aglomeracion_espacios_publicos": {},
+    "aglomeracion_espacios_privados": {},
+    "incumplimiento_medidas_sanitarias": {
+        "sections": [
+            {
+                "name": "Acceso",
+                "fields": [
+                    {
+                        "name": "Tienen lavaderos de manos con jabon",
+                        "type": "checkbox"
+                    },
+                    {
+                        "name": "Se toma la temperatura del personal ingresante",
+                        "type": "checkbox"
+                    }
+                ]
+            },
+            {
+                "name": "Dentro del local",
+                "fields": [
+                    {
+                        "name": "Se respeta la distancia de 2 metros entre empleados",
+                        "type": "checkbox"
+                    },
+                    {
+                        "name": "Se proporciona alcohol en gel a cada empleado",
+                        "type": "checkbox"
+                    }
+                ]
+            }
+        ]
+    },
+    "incumplimiento_cuarentena": {
+        "sections": [
+            {
+                "name": "",
+                "fields": [
+                    {
+                        "name": "Zona/lugar",
+                        "type": "text"
+                    },
+                    {
+                        "name": "Numero aproximado de personas",
+                        "type": "text"
+                    }
+                ]
+            }
+        ]
+    },
+    "sintomas": {
+
+    },
+    "situacion_calle": {
+
+    },
+    "asistencia": {
+
+    },
+    "aps": {
+
+    }
+}
