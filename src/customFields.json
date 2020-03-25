@@ -7,11 +7,23 @@
                 "name": "Acceso",
                 "fields": [
                     {
-                        "name": "Tienen lavaderos de manos con jabon",
+                        "name": "Tienen lavaderos de manos con jabon de coco o pulverizador con alcohol hidrolizado",
                         "type": "checkbox"
                     },
                     {
                         "name": "Se toma la temperatura del personal ingresante",
+                        "type": "checkbox"
+                    },
+                    {
+                        "name": "Se lleva registro de la toma de temperatura",
+                        "type": "checkbox"
+                    },
+                    {
+                        "name": "El personal llega e ingresa con tapabocas",
+                        "type": "checkbox"
+                    },
+                    {
+                        "name": "Se desinfecta al personal rociándolo con pulverizador de alcohol hidrolizado",
                         "type": "checkbox"
                     }
                 ]
@@ -49,15 +61,38 @@
         ]
     },
     "sintomas": {
-
+        "sections": [
+            {
+                "name": "Síntomas",
+                "fields": [
+                    {
+                        "name": "Secreciones nasales",
+                        "type": "checkbox"
+                    },
+                    {
+                        "name": "Dolor de garganta",
+                        "type": "checkbox"
+                    },
+                    {
+                        "name": "Tos",
+                        "type": "checkbox"
+                    },
+                    {
+                        "name": "Fiebre",
+                        "type": "checkbox"
+                    },
+                    {
+                        "name": "Dificultad para respirar",
+                        "type": "checkbox"
+                    }
+                ]
+            }
+        ]
     },
     "situacion_calle": {
-
     },
     "asistencia": {
-
     },
     "aps": {
-
     }
 }
