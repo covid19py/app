@@ -13,7 +13,8 @@ import {
   Hero,
   Column,
   Card,
-  Box
+  Box,
+  Radio
 } from "rbx";
 
 import "./App.css";
@@ -31,7 +32,10 @@ const validationSchema = Yup.object().shape({
 });
 
 const App = ({ google }) => {
+//-25.2968361,-57.668129
+
   const { latitude, longitude } = usePosition();
+
   const formik = useFormik({
     initialValues: {
       canal: "Llamada",
@@ -274,6 +278,74 @@ const App = ({ google }) => {
                 </Field>
                 </Box>
                 
+                {values.tipo_denuncia == "otros" && (
+                  <Box>
+                  <Field>
+                    <Label htmlFor="detalle_tipo_acceso">Acceso al local</Label>
+                    <Control>
+                      <label>
+                        <input
+                          type="radio"
+                          id="detalle_tipo_acceso"
+                          checked={values.detalle_tipo_acceso === "lavaderos"}
+                          onChange={() => setFieldValue("detalle_tipo_acceso", "lavaderos")}
+                          onBlur={handleBlur}/> tienen lavaderos de manos con jabón de coco o pulverizador con alcohol hidrolizado.
+                      </label><br/>
+                      <label>
+                        <input
+                          type="radio"
+                          id="detalle_tipo_acceso"
+                          checked={values.detalle_tipo_acceso === "toma_temperatura"}
+                          onChange={() => setFieldValue("detalle_tipo_acceso", "toma_temperatura")}
+                          onBlur={handleBlur}/> se toma la temperatura del personal ingresante.
+                      </label><br/>                      
+                      <label>
+                        <input
+                          type="radio"
+                          id="detalle_tipo_acceso"
+                          checked={values.detalle_tipo_acceso === "registro_temperatura"}
+                          onChange={() => setFieldValue("detalle_tipo_acceso", "registro_temperatura")}
+                          onBlur={handleBlur}/> se toma la temperatura del personal ingresante.
+                      </label><br/>                      
+                      <label>
+                        <input
+                          type="radio"
+                          id="detalle_tipo_acceso"
+                          checked={values.detalle_tipo_acceso === "tapaboca"}
+                          onChange={() => setFieldValue("detalle_tipo_acceso", "tapaboca")}
+                          onBlur={handleBlur}/> el personal llega e ingresa con tapabocas.
+                      </label><br/>                      
+                      <label>
+                        <input
+                          type="radio"
+                          id="detalle_tipo_acceso"
+                          checked={values.detalle_tipo_acceso === "desinfecta"}
+                          onChange={() => setFieldValue("detalle_tipo_acceso", "desinfecta")}
+                          onBlur={handleBlur}/> se desinfecta al personal rociandolo con pulverizador de alcohol hidrolizado.
+                      </label>
+                      <br/><br/>
+                      <Label htmlFor="detalle_tipo_dentro">Dentro del local</Label>
+                      <label>
+                        <input
+                          type="radio"
+                          id="detalle_tipo_dentro"
+                          checked={values.detalle_tipo_dentro === "distancia"}
+                          onChange={() => setFieldValue("detalle_tipo_dentro", "distancia")}
+                          onBlur={handleBlur}/> se respeta la distancia de 2 metros entre empleados.
+                      </label><br/>
+                      <label>
+                        <input
+                          type="radio"
+                          id="detalle_tipo_dentro"
+                          checked={values.detalle_tipo_dentro === "alcohol_gel"}
+                          onChange={() => setFieldValue("detalle_tipo_dentro", "alcohol_gel")}
+                          onBlur={handleBlur}/> a cada empleado se proporciona alcohol en gel.
+                      </label><br/>
+                    </Control>
+                  </Field>
+              </Box>
+                )}
+
                 <Box>
                 <Field horizontal>
                   <Field.Body>
@@ -550,7 +622,7 @@ const App = ({ google }) => {
 };
 
 export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GMAPS_API_KEY, // google maps key
+  apiKey: "AIzaSyBkRE2KGVntDC8fsLDvdTk-z4zdOe9wqpY", //process.env.REACT_APP_GMAPS_API_KEY, // google maps key
   language: "es-419",
   libraries: ["places"]
 })(App);
