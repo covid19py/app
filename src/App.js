@@ -278,7 +278,7 @@ const App = ({ google }) => {
                 </Field>
                 </Box>
                 
-                {values.tipo_denuncia == "otros" && (
+                {values.tipo_denuncia == "medidas_sanitarias" && (
                   <Box>
                   <Field>
                     <Label htmlFor="detalle_tipo_acceso">Acceso al local</Label>
