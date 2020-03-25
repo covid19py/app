@@ -58,7 +58,7 @@ const App = ({ google }) => {
       }).then((res) => res.json())
       .then((data) => {
         console.log("got",data)
-        resetForm({})
+        resetForm({values: ""})
       })
       .catch((err) => console.log(err))
       // alert(JSON.stringify(values, null, 2));
