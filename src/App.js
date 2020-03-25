@@ -217,7 +217,7 @@ const App = ({ google }) => {
                               Correo electrónico
                             </Select.Option>
                             <Select.Option value="otros" label="Otros">
-                              Redes Sociales
+                              Otros
                             </Select.Option>
                           </Select>
                         </Select.Container>
