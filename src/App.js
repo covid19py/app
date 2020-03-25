@@ -622,7 +622,7 @@ const App = ({ google }) => {
 };
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyBkRE2KGVntDC8fsLDvdTk-z4zdOe9wqpY", //process.env.REACT_APP_GMAPS_API_KEY, // google maps key
+  apiKey: process.env.REACT_APP_GMAPS_API_KEY, // google maps key
   language: "es-419",
   libraries: ["places"]
 })(App);
