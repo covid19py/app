@@ -18,11 +18,13 @@ import {
 } from "rbx";
 
 import "./App.css";
+import 'react-notifications/lib/notifications.css';
 import { DisplayFormikState } from "./helper";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 
 import { usePosition } from "use-position";
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import React, { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -59,12 +61,15 @@ const App = ({ google }) => {
         method: "post",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(values, null, 2)
-      })
-        .then(res => res.json())
-        .then(data => {
+      }).then((res) => res.json())
+        .then((data) => {
+          console.log("got", data)
           resetForm({ values: "" });
+          NotificationManager.success('','Denuncia enviada');
+          document.body.scrollTop = 0; // For Safari
+          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera        
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err))
     },
     validationSchema
   });
@@ -644,6 +649,7 @@ const App = ({ google }) => {
             </Column>
             <Column></Column>
           </Container>
+          <NotificationContainer />
         </Hero.Body>
       </Hero>
     </React.Fragment>
