@@ -42,9 +42,15 @@ class CustomForm extends React.Component {
   renderField(field) {
     switch(field.type) {
       case "checkbox":
-        return <Checkbox name={field.name} value={this.fields[field.name] || ''} onChange={this.handleChange} />;
+        return <lavel>
+            <Checkbox name={field.name} value={this.fields[field.name] || ''} onChange={this.handleChange} />
+            {field.name}
+          </lavel>
       case "text":
-        return <Input name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange}/>
+        return <Field>
+            <Label htmlFor={field.name}>{field.name}</Label>
+            <Input name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange}/>
+          </Field>
       default:
         return (null);
     }
@@ -59,19 +65,19 @@ class CustomForm extends React.Component {
       return (null);
     }
     return sections.map((type, index) =>
-      <div key={index}>
+      <Field key={index}>
         <Label>{sections[index].name}</Label>
         {
           sections[index].fields.map((field, fieldIndex) =>
             <Field horizontal key={field.name}>
-              <Label>{field.name}</Label>
+              {/*<Label>{field.name}</Label>*/}
               <Control>
               {this.renderField(field)}
               </Control>
             </Field>
           )
         }
-      </div>
+      </Field>
     );
   }
 };
