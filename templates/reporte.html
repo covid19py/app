@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8" />
@@ -18,11 +18,7 @@
 <body>
     <div class="wrapper">
         <div class="sidebar" data-color="blue">
-            <!--
-        Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
 
-        Tip 2: you can also add an image using data-image tag
-    -->
             <div class="sidebar-wrapper">
                 <div class="logo">
                     <a href="/reporte" class="simple-text">
@@ -31,9 +27,9 @@
                 </div>
                 <ul class="nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="dashboard.html">
+                        <a class="nav-link" href="/reporte">
                             <i class="nc-icon nc-chart-pie-35"></i>
-                            <p>Reporte general</p>
+                            <p>Reporte General</p>
                         </a>
                     </li>
                     <li>
@@ -42,59 +38,17 @@
                                 <h4 class="card-title">Filtro</h4>
                                 <p class="card-category">Tipos de denuncia a visualizar</p>
                             </div>
-                            <!--<div class="card-body table-full-width table-responsive">-->
                             <div class="card-body">
                                 <form>
-                                    <p><input type="checkbox"></input><label for="x">Aglomeración</label></p>
-                                    <p><input type="checkbox"></input><label for="x">Incumpl. (medidas sanitarias)</label></p>
-                                    <p><input type="checkbox"></input><label for="x">Incumpl. (cuarentena)</label></p>
-                                    <p><input type="checkbox"></input><label for="x">Reporte de síntomas</label></p>
+                                    
+                                    <p><label> <input type="checkbox"/> Aglomeración</label></p>
+                                    <p><label> <input type="checkbox"/> Incumpl. medidas sanitarias</label></p>
+                                    <p><label> <input type="checkbox"/> Incumpl. cuarentena</label></p>
+                                    <p><label> <input type="checkbox"/> Reporte de síntomas</label></p>
                                 </form>
-                                <div class="legend"></div>
-                                <div class="stats">
-                                    <!--<i class="fa fa-clock-o"></i> Campaign sent 2 days ago-->
-                                </div>
                             </div>
                         </div>
                     </li>
-                    <!--
-                    <li>
-                        <a class="nav-link" href="./table.html">
-                            <i class="nc-icon nc-notes"></i>
-                            <p>Table List</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="./typography.html">
-                            <i class="nc-icon nc-paper-2"></i>
-                            <p>Typography</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="./icons.html">
-                            <i class="nc-icon nc-atom"></i>
-                            <p>Icons</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="./maps.html">
-                            <i class="nc-icon nc-pin-3"></i>
-                            <p>Maps</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="./notifications.html">
-                            <i class="nc-icon nc-bell-55"></i>
-                            <p>Notifications</p>
-                        </a>
-                    </li>
-                    <li class="nav-item active active-pro">
-                        <a class="nav-link active" href="upgrade.html">
-                            <i class="nc-icon nc-alien-33"></i>
-                            <p>Upgrade to PRO</p>
-                        </a>
-                    </li>
-                -->
                 </ul>
                 <div>
 
@@ -114,61 +68,8 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-end" id="navigation">
                         <ul class="nav navbar-nav mr-auto">
-                            <!--
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-toggle="dropdown">
-                                    <i class="nc-icon nc-palette"></i>
-                                    <span class="d-lg-none">Dashboard</span>
-                                </a>
-                            </li>
-                            <li class="dropdown nav-item">
-                                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                                    <i class="nc-icon nc-planet"></i>
-                                    <span class="notification">5</span>
-                                    <span class="d-lg-none">Notification</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Notification 1</a>
-                                    <a class="dropdown-item" href="#">Notification 2</a>
-                                    <a class="dropdown-item" href="#">Notification 3</a>
-                                    <a class="dropdown-item" href="#">Notification 4</a>
-                                    <a class="dropdown-item" href="#">Another notification</a>
-                                </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nc-icon nc-zoom-split"></i>
-                                    <span class="d-lg-block">&nbsp;Search</span>
-                                </a>
-                            </li>
-                            -->
                         </ul>
                         <ul class="navbar-nav ml-auto">
-                            <!--
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <span class="no-icon">Account</span>
-                                </a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="no-icon">Dropdown</span>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                    <div class="divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <span class="no-icon">Log out</span>
-                                </a>
-                            </li>
-                            -->
                         </ul>
                     </div>
                 </div>
@@ -177,28 +78,6 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <!--
-                        <div class="col-md-4">
-                            <div class="card ">
-                                <div class="card-header ">
-                                    <h4 class="card-title">Email Statistics</h4>
-                                    <p class="card-category">Last Campaign Performance</p>
-                                </div>
-                                <div class="card-body ">
-                                    <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
-                                    <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Open
-                                        <i class="fa fa-circle text-danger"></i> Bounce
-                                        <i class="fa fa-circle text-warning"></i> Unsubscribe
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        -->
                         <div class="col-md-9">
                             <div id="map"></div>
                         </div>
@@ -206,59 +85,29 @@
                             <div class="card" style="height: 100%;">
                                 <div class="card-header">
                                     <h4 class="card-title">Información de denuncia</h4>
-                                    <!--<p class="card-category">Last Campaign Performance</p>-->
                                 </div>
                                 <div class="card-body">
                                     <p><b>Tipo de denuncia:</b> <span id="tipo_denuncia"></span></p>
-                                    <p><b>Denunciante:</b> <span id="denunciante"></span><b>
-                                            <p><b>Observaciones</b></p>
-                                            <p><textarea style="width: 100%;" readonly></textarea></p>
-                                            <!--<div id="chartPreferences" class="ct-chart ct-perfect-fourth">xd</div>-->
-
-                                            <!--
+                                    <p><b>Denunciante:</b> <span id="denunciante"></span>
+                                    <p><b>Observaciones</b></p>
+                                    <p><textarea style="width: 100%;" readonly></textarea></p>
+                                    <p class="card-text">
+                                        <a href="#" type="submit" class="col btn btn-md btn-info btn-fill atendido" style="white-space: normal;">Marcar
+                                            como
+                                            atendido</a>
+                                    </p>
+                                    <hr>
                                     <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Open
-                                        <i class="fa fa-circle text-danger"></i> Bounce
-                                        <i class="fa fa-circle text-warning"></i> Unsubscribe
+                                        <div class="stats">
+                                            <i class="fa fa-clock-o"></i> Recibida en <span id="fecha">00/00/00
+                                                00:00:00</span>
+                                        </div>
                                     </div>
-                                    -->
-                                            <p>
-                                                <a href="#" type="submit" class="btn btn-info btn-fill atendido">Marcar
-                                                    como
-                                                    atendido</a>
-                                            </p>
-                                            <hr>
-                                            <div class="stats">
-                                                <i class="fa fa-clock-o"></i> Recibida en <span id="fecha">00/00/00
-                                                    00:00:00</span>
-                                            </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <!--
-                        <div class="col-md-6">
-                            <div class="card ">
-                                <div class="card-header ">
-                                    <h4 class="card-title">2017 Sales</h4>
-                                    <p class="card-category">All products including Taxes</p>
-                                </div>
-                                <div class="card-body ">
-                                    <div id="chartActivity" class="ct-chart"></div>
-                                </div>
-                                <div class="card-footer ">
-                                    <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Tesla Model S
-                                        <i class="fa fa-circle text-danger"></i> BMW 5 Series
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-check"></i> Data information certified
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
+                    <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="card  card-tasks">
                                 <div class="card-header ">
@@ -305,124 +154,23 @@
                 <div class="container-fluid">
                     <nav>
                         <ul class="footer-menu">
-                            <!--
-                            <li>
-                                <a href="#">
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Company
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Portfolio
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Blog
-                                </a>
-                            </li>
-                            -->
                         </ul>
                     </nav>
                 </div>
             </footer>
         </div>
     </div>
-    <!--   -->
-    <!-- <div class="fixed-plugin">
-    <div class="dropdown show-dropdown">
-        <a href="#" data-toggle="dropdown">
-            <i class="fa fa-cog fa-2x"> </i>
-        </a>
-
-        <ul class="dropdown-menu">
-			<li class="header-title"> Sidebar Style</li>
-            <li class="adjustments-line">
-                <a href="javascript:void(0)" class="switch-trigger">
-                    <p>Background Image</p>
-                    <label class="switch">
-                        <input type="checkbox" data-toggle="switch" checked="" data-on-color="primary" data-off-color="primary"><span class="toggle"></span>
-                    </label>
-                    <div class="clearfix"></div>
-                </a>
-            </li>
-            <li class="adjustments-line">
-                <a href="javascript:void(0)" class="switch-trigger background-color">
-                    <p>Filters</p>
-                    <div class="pull-right">
-                        <span class="badge filter badge-black" data-color="black"></span>
-                        <span class="badge filter badge-azure" data-color="azure"></span>
-                        <span class="badge filter badge-green" data-color="green"></span>
-                        <span class="badge filter badge-orange" data-color="orange"></span>
-                        <span class="badge filter badge-red" data-color="red"></span>
-                        <span class="badge filter badge-purple active" data-color="purple"></span>
-                    </div>
-                    <div class="clearfix"></div>
-                </a>
-            </li>
-            <li class="header-title">Sidebar Images</li>
-
-            <li class="active">
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-1.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-3.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="..//assets/img/sidebar-4.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-5.jpg" alt="" />
-                </a>
-            </li>
-
-            <li class="button-container">
-                <div class="">
-                    <a href="http://www.creative-tim.com/product/light-bootstrap-dashboard" target="_blank" class="btn btn-info btn-block btn-fill">Download, it's free!</a>
-                </div>
-            </li>
-
-            <li class="header-title pro-title text-center">Want more components?</li>
-
-            <li class="button-container">
-                <div class="">
-                    <a href="http://www.creative-tim.com/product/light-bootstrap-dashboard-pro" target="_blank" class="btn btn-warning btn-block btn-fill">Get The PRO Version!</a>
-                </div>
-            </li>
-
-            <li class="header-title" id="sharrreTitle">Thank you for sharing!</li>
-
-            <li class="button-container">
-				<button id="twitter" class="btn btn-social btn-outline btn-twitter btn-round sharrre"><i class="fa fa-twitter"></i> · 256</button>
-                <button id="facebook" class="btn btn-social btn-outline btn-facebook btn-round sharrre"><i class="fa fa-facebook-square"></i> · 426</button>
-            </li>
-        </ul>
-    </div>
-</div>
- -->
+    <script src="/assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
+    <script src="/assets/js/core/popper.min.js" type="text/javascript"></script>
+    <script src="/assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/assets/js/plugins/bootstrap-switch.js"></script>
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnsGTR7uV4YR5ciyRlvZehgrxT0wjS7MM&language=es-419&region=PY"></script>
+    <script src="/assets/js/plugins/chartist.min.js"></script>
+    <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+    <script src="/assets/js/light-bootstrap-dashboard.js?v=2.0.0 " type="text/javascript"></script>
+    <script src="/assets/js/moment.min.js"></script>
+    <script src="/assets/js/app.js"></script>
 </body>
-<script src="/assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
-<script src="/assets/js/core/popper.min.js" type="text/javascript"></script>
-<script src="/assets/js/core/bootstrap.min.js" type="text/javascript"></script>
-<script src="/assets/js/plugins/bootstrap-switch.js"></script>
-<script type="text/javascript"
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnsGTR7uV4YR5ciyRlvZehgrxT0wjS7MM&language=es-419&region=PY"></script>
-<script src="/assets/js/plugins/chartist.min.js"></script>
-<script src="/assets/js/plugins/bootstrap-notify.js"></script>
-<script src="/assets/js/light-bootstrap-dashboard.js?v=2.0.0 " type="text/javascript"></script>
-<script src="/assets/js/moment.min.js"></script>
-<script src="/assets/js/app.js"></script>
 
 </html>
