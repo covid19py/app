@@ -32,24 +32,30 @@ import customFields from "./customFields.json";
 class CustomForm extends React.Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.fields = {};
+  }
+  handleChange = (e) => {
+    this.fields[e.target.name] = e.target.value;
+    this.props.setCustomFields(this.fields);
   }
   renderField(field) {
-    switch (field.type) {
+    switch(field.type) {
       case "checkbox":
-        return <Checkbox />;
+        return <Checkbox name={field.name} value={this.fields[field.name] || ''} onChange={this.handleChange} />;
       case "text":
-        return <Input type="text" />
+        return <Input name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange}/>
       default:
         return (null);
     }
   }
   render() {
     const fields = this.props.customFields[this.props.tipoDenuncia];
-    if (fields == null) {
+    if(fields == null) {
       return (null);
     }
     const sections = fields["sections"];
-    if (sections == null) {
+    if(sections == null) {
       return (null);
     }
     return sections.map((type, index) =>
@@ -60,7 +66,7 @@ class CustomForm extends React.Component {
             <Field horizontal key={field.name}>
               <Label>{field.name}</Label>
               <Control>
-                {this.renderField(field)}
+              {this.renderField(field)}
               </Control>
             </Field>
           )
@@ -97,7 +103,8 @@ const App = ({ google }) => {
       tipo_denuncia: "aglomeracion",
       observaciones: "",
       coordenadas: null,
-      estado: "pendiente"
+      estado: "pendiente",
+      custom_fields: {}
     },
     onSubmit: async (values, { resetForm }) => {
       // await new Promise(resolve => setTimeout(resolve, 500));
@@ -220,6 +227,32 @@ const App = ({ google }) => {
     autocomplete.current.addListener("place_changed", placeChangedHandler);
   };
 
+  const handleTypeChange = (event) => {
+    setFieldValue("tipo_denuncia", event.target.value);
+    /*
+    setFieldValue("tipo_denuncia", event.target.value);
+    const fields = customFields[event.target.value];
+    if(fields == null) {
+      return (null);
+    }
+    const sections = fields["sections"];
+    if(sections == null) {
+      return (null);
+    }
+    const initialFieldValues = {};
+    sections.map((section, index) => {
+      section.fields.map((field, fieldIndex) => {
+        initialFieldValues[field.name] = "";
+      });
+    });
+    setFieldValue("custom_fields", initialFieldValues);
+    */
+  };
+
+  const setCustomFields = (fields) => {
+    setFieldValue("custom_fields", fields, false);
+  };
+
   return (
     <React.Fragment>
       <Hero>
@@ -279,7 +312,7 @@ const App = ({ google }) => {
                             id="tipo_denuncia"
                             name="tipo_denuncia"
                             value={values.tipo_denuncia}
-                            onChange={handleChange}
+                            onChange={handleTypeChange}
                             onBlur={handleBlur}
                           >
                             <Select.Option
@@ -322,7 +355,7 @@ const App = ({ google }) => {
                 </Field>
               </Box>
               <Box>
-                <CustomForm tipoDenuncia={values.tipo_denuncia} customFields={customFields} />
+                <CustomForm tipoDenuncia={values.tipo_denuncia} customFields={customFields} setCustomFields={setCustomFields} initialValues={values.custom_fields} />
               </Box>
               <Box>
                 <Field horizontal>
