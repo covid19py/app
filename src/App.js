@@ -49,7 +49,7 @@ class CustomForm extends React.Component {
       case "text":
         return <Field>
             <Label htmlFor={field.name}>{field.name}</Label>
-            <Input name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange}/>
+            <Input autoComplete="off" name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange}/>
           </Field>
       default:
         return (null);
