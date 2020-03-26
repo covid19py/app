@@ -42,38 +42,68 @@ class CustomForm extends React.Component {
     this.props.setCustomFields(this.fields);
   }
   renderField(field) {
-    switch (field.type) {
+    switch(field.type) {
       case "checkbox":
-        return <Checkbox name={field.name} value={this.fields[field.name] || ''} onChange={this.handleChange} />;
+        return <div>
+            <Checkbox name={field.name} value={this.fields[field.name] || ''} onChange={this.handleChange} />
+            <lavel>&nbsp; &nbsp; {field.name}</lavel>
+          </div>
       case "text":
-        return <Input name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange} />
+        return <div>
+            <Label htmlFor={field.name}>{field.name}</Label>
+            <Control>
+              <Input autoComplete="off" name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange}/>
+            </Control>
+          </div>
       default:
         return (null);
     }
   }
   render() {
     const fields = this.props.customFields[this.props.tipoDenuncia];
-    if (fields == null) {
+    if(fields == null) {
       return (null);
     }
     const sections = fields["sections"];
-    if (sections == null) {
+    if(sections == null) {
       return (null);
     }
+    
     return sections.map((type, index) =>
-      <div key={index}>
-        <Label>{sections[index].name}</Label>
+      <Box key={index}>
+      {sections[index].name == "" ? (
+        <Field horizontal>
+          <Field.Body>
         {
           sections[index].fields.map((field, fieldIndex) =>
-            <Field horizontal key={field.name}>
-              <Label>{field.name}</Label>
-              <Control>
-                {this.renderField(field)}
-              </Control>
+            <Field key={field.name}>
+              
+              {this.renderField(field)}
+            
             </Field>
           )
         }
-      </div>
+          </Field.Body>
+        </Field>) : 
+        (
+          <Field>
+            <Label>{sections[index].name}</Label>
+            {
+              sections[index].fields.map((field, fieldIndex) =>
+                <Field key={field.name}>
+                  {/*<Label>{field.name}</Label>*/}
+                  <Control>
+                  {this.renderField(field)}
+                  </Control>
+                </Field>
+              )
+            }
+          </Field>
+        )  
+        
+        }
+
+        </Box>
     );
   }
 };
@@ -357,9 +387,7 @@ const App = ({ google }) => {
                   </Field.Body>
                 </Field>
               </Box>
-              <Box>
-                <CustomForm tipoDenuncia={values.tipo_denuncia} customFields={customFields} setCustomFields={setCustomFields} initialValues={values.custom_fields} />
-              </Box>
+              <CustomForm tipoDenuncia={values.tipo_denuncia} customFields={customFields} setCustomFields={setCustomFields} initialValues={values.custom_fields} />
               <Box>
                 <Field horizontal>
                   <Field.Body>
