@@ -18,11 +18,13 @@ import {
 } from "rbx";
 
 import "./App.css";
+import 'react-notifications/lib/notifications.css';
 import { DisplayFormikState } from "./helper";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 
 import { usePosition } from "use-position";
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import React, { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -40,22 +42,22 @@ class CustomForm extends React.Component {
     this.props.setCustomFields(this.fields);
   }
   renderField(field) {
-    switch(field.type) {
+    switch (field.type) {
       case "checkbox":
         return <Checkbox name={field.name} value={this.fields[field.name] || ''} onChange={this.handleChange} />;
       case "text":
-        return <Input name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange}/>
+        return <Input name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange} />
       default:
         return (null);
     }
   }
   render() {
     const fields = this.props.customFields[this.props.tipoDenuncia];
-    if(fields == null) {
+    if (fields == null) {
       return (null);
     }
     const sections = fields["sections"];
-    if(sections == null) {
+    if (sections == null) {
       return (null);
     }
     return sections.map((type, index) =>
@@ -66,7 +68,7 @@ class CustomForm extends React.Component {
             <Field horizontal key={field.name}>
               <Label>{field.name}</Label>
               <Control>
-              {this.renderField(field)}
+                {this.renderField(field)}
               </Control>
             </Field>
           )
@@ -81,7 +83,6 @@ const validationSchema = Yup.object().shape({
 });
 
 const App = ({ google }) => {
-
   let { latitude, longitude, error } = usePosition();
   if (error !== null) {
     latitude = -25.2966808;
@@ -115,10 +116,12 @@ const App = ({ google }) => {
       }).then((res) => res.json())
         .then((data) => {
           console.log("got", data)
-          resetForm({ values: "" })
+          resetForm({ values: "" });
+          NotificationManager.success('','Denuncia enviada');
+          document.body.scrollTop = 0; // For Safari
+          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera        
         })
         .catch((err) => console.log(err))
-      // alert(JSON.stringify(values, null, 2));
     },
     validationSchema
   });
@@ -626,6 +629,7 @@ const App = ({ google }) => {
             </Column>
             <Column></Column>
           </Container>
+          <NotificationContainer />
         </Hero.Body>
       </Hero>
     </React.Fragment>
