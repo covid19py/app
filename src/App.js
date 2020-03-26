@@ -30,88 +30,66 @@ import * as Yup from "yup";
 import customFields from "./customFields.json";
 
 class CustomForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.fields = {};
-  }
-  handleChange = (e) => {
-    this.fields[e.target.name] = e.target.value;
-    this.props.setCustomFields(this.fields);
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.handleChange = this.handleChange.bind(this);
+  //   this.fields = {};
+  // }
+  // handleChange = e => {
+  //   this.fields[e.target.name] = e.target.value;
+  //   this.props.setCustomFields(this.fields);
+  // };
   renderField(field) {
-    switch(field.type) {
+    switch (field.type) {
       case "checkbox":
-        return <div>
-            <Checkbox name={field.name} value={this.fields[field.name] || ''} onChange={this.handleChange} />
-            <lavel>&nbsp; &nbsp; {field.name}</lavel>
-          </div>
+        return (
+          <Checkbox
+            name={field.name}
+            value={this.fields[field.name] || ""}
+            onChange={this.handleChange}
+          />
+        );
       case "text":
-        return <div>
-            <Label htmlFor={field.name}>{field.name}</Label>
-            <Control>
-              <Input autoComplete="off" name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange}/>
-            </Control>
-          </div>
+        return (
+          <Input
+            name={field.name}
+            value={this.fields[field.name] || ""}
+            type="text"
+            onChange={this.handleChange}
+          />
+        );
       default:
-        return (null);
+        return null;
     }
   }
   render() {
     const fields = this.props.customFields[this.props.tipoDenuncia];
-    if(fields == null) {
-      return (null);
+    if (fields == null) {
+      return null;
     }
     const sections = fields["sections"];
-    if(sections == null) {
-      return (null);
+    if (sections == null) {
+      return null;
     }
-    
-    return sections.map((type, index) =>
-      <Box key={index}>
-      {sections[index].name == "" ? (
-        <Field horizontal>
-          <Field.Body>
-        {
-          sections[index].fields.map((field, fieldIndex) =>
-            <Field key={field.name}>
-              
-              {this.renderField(field)}
-            
-            </Field>
-          )
-        }
-          </Field.Body>
-        </Field>) : 
-        (
-          <Field>
-            <Label>{sections[index].name}</Label>
-            {
-              sections[index].fields.map((field, fieldIndex) =>
-                <Field key={field.name}>
-                  {/*<Label>{field.name}</Label>*/}
-                  <Control>
-                  {this.renderField(field)}
-                  </Control>
-                </Field>
-              )
-            }
+    return sections.map((type, index) => (
+      <div key={index}>
+        <Label>{sections[index].name}</Label>
+        {sections[index].fields.map((field, fieldIndex) => (
+          <Field horizontal key={field.name}>
+            <Label>{field.name}</Label>
+            <Control>{this.renderField(field)}</Control>
           </Field>
-        )  
-        
-        }
-
-        </Box>
-    );
+        ))}
+      </div>
+    ));
   }
-};
+}
 
 const validationSchema = Yup.object().shape({
   correo: Yup.string().email("Invalid email")
 });
 
 const App = ({ google }) => {
-
   let { latitude, longitude, error } = usePosition();
   if (error !== null) {
     latitude = -25.2966808;
@@ -137,18 +115,16 @@ const App = ({ google }) => {
       custom_fields: {}
     },
     onSubmit: async (values, { resetForm }) => {
-      // await new Promise(resolve => setTimeout(resolve, 500));
       fetch("/", {
         method: "post",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(values, null, 2)
-      }).then((res) => res.json())
-        .then((data) => {
-          console.log("got", data)
-          resetForm({ values: "" })
+      })
+        .then(res => res.json())
+        .then(data => {
+          resetForm({ values: "" });
         })
-        .catch((err) => console.log(err))
-      // alert(JSON.stringify(values, null, 2));
+        .catch(err => console.log(err));
     },
     validationSchema
   });
@@ -170,6 +146,7 @@ const App = ({ google }) => {
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [showCustomFields, setShowCustomFields] = useState(null);
 
   const positionAvailable = latitude && longitude;
   const mapRef = useRef(null);
@@ -179,7 +156,7 @@ const App = ({ google }) => {
   const autocompleteEl = useRef(null);
 
   const callGeocoderAPI = ({ latlng }) => {
-    geocoder.current.geocode({ location: latlng }, function (results, status) {
+    geocoder.current.geocode({ location: latlng }, function(results, status) {
       if (status === "OK") {
         if (results[0]) {
           setStreet(results[0].formatted_address);
@@ -257,30 +234,87 @@ const App = ({ google }) => {
     autocomplete.current.addListener("place_changed", placeChangedHandler);
   };
 
-  const handleTypeChange = (event) => {
-    setFieldValue("tipo_denuncia", event.target.value);
-    /*
-    setFieldValue("tipo_denuncia", event.target.value);
-    const fields = customFields[event.target.value];
-    if(fields == null) {
-      return (null);
+  useEffect(() => {
+    const hasCustomField = customFields[values.tipo_denuncia];
+    if (hasCustomField) {
+      const hasSections = customFields[values.tipo_denuncia].sections;
+      if (hasSections) {
+        // const mappedFields = hasSections.map(section => {
+        //   return {
+        //     [section.name]: {
+
+        //     }
+        //   }
+        // })
+
+        setFieldValue(
+          "custom_fields",
+          customFields[values.tipo_denuncia].sections,
+          false
+        );
+        setShowCustomFields(true);
+      }
     }
-    const sections = fields["sections"];
-    if(sections == null) {
-      return (null);
-    }
-    const initialFieldValues = {};
-    sections.map((section, index) => {
-      section.fields.map((field, fieldIndex) => {
-        initialFieldValues[field.name] = "";
-      });
-    });
-    setFieldValue("custom_fields", initialFieldValues);
-    */
+  }, [setFieldValue, values.tipo_denuncia]);
+
+  const handleCustomFieldChange = () => {
+    debugger;
   };
 
-  const setCustomFields = (fields) => {
-    setFieldValue("custom_fields", fields, false);
+  const renderField = field => {
+    switch (field.type) {
+      case "checkbox":
+        return (
+          <Label>
+            <Checkbox
+              id={field.name}
+              value=""
+              onChange={() => {
+                debugger;
+              }}
+              type="checkbox"
+              // name={field.name}
+              // value=
+              // value={this.fields[field.name] || ""}
+              // onChange={this.handleChange}
+            />
+            {field.name}
+          </Label>
+        );
+
+      case "text":
+        return (
+          <Field>
+            <Label htmlFor={field.name}>{field.name}</Label>
+            <Input
+              autoComplete="off"
+              name={field.name}
+              // value={this.fields[field.name] || ""}
+              type="text"
+              onChange={() => {
+                debugger;
+              }}
+            />
+          </Field>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const renderSections = sections => {
+    if (Array.isArray(sections)) {
+      return sections.map((section, index) => (
+        <Field key={index}>
+          <Label>{sections[index].name}</Label>
+          {sections[index].fields.map((field, fieldIndex) => (
+            <Field horizontal key={field.name}>
+              <Control>{renderField(field)}</Control>
+            </Field>
+          ))}
+        </Field>
+      ));
+    }
   };
 
   return (
@@ -292,7 +326,8 @@ const App = ({ google }) => {
               <Title>Gestión de denuncias</Title>
             </Column>
           </Container>
-          <Container as="form"
+          <Container
+            as="form"
             onSubmit={handleSubmit}
             onKeyDown={e => {
               if ((e.charCode || e.keyCode) === 13) {
@@ -324,7 +359,10 @@ const App = ({ google }) => {
                             >
                               Redes Sociales
                             </Select.Option>
-                            <Select.Option value="correo" label="Correo electrónico">
+                            <Select.Option
+                              value="correo"
+                              label="Correo electrónico"
+                            >
                               Correo electrónico
                             </Select.Option>
                             <Select.Option value="otros" label="Otros">
@@ -342,7 +380,7 @@ const App = ({ google }) => {
                             id="tipo_denuncia"
                             name="tipo_denuncia"
                             value={values.tipo_denuncia}
-                            onChange={handleTypeChange}
+                            onChange={handleChange}
                             onBlur={handleBlur}
                           >
                             <Select.Option
@@ -384,9 +422,9 @@ const App = ({ google }) => {
                   </Field.Body>
                 </Field>
               </Box>
-              
-                <CustomForm tipoDenuncia={values.tipo_denuncia} customFields={customFields} setCustomFields={setCustomFields} initialValues={values.custom_fields} />
-              
+              {showCustomFields && (
+                <Box>{renderSections(values.custom_fields)}</Box>
+              )}
               <Box>
                 <Field horizontal>
                   <Field.Body>
@@ -430,7 +468,9 @@ const App = ({ google }) => {
                           }
                         />
                         {errors.apellido && touched.apellido && (
-                          <div className="input-feedback">{errors.apellido}</div>
+                          <div className="input-feedback">
+                            {errors.apellido}
+                          </div>
                         )}
                       </Control>
                     </Field>
@@ -459,7 +499,9 @@ const App = ({ google }) => {
                           }
                         />
                         {errors.telefono && touched.telefono && (
-                          <div className="input-feedback">{errors.telefono}</div>
+                          <div className="input-feedback">
+                            {errors.telefono}
+                          </div>
                         )}
                       </Control>
                     </Field>
@@ -597,8 +639,8 @@ const App = ({ google }) => {
                       </Map>
                     </>
                   ) : (
-                      <Label>Cargando...</Label>
-                    )}
+                    <Label>Cargando...</Label>
+                  )}
                 </Field>
               </Box>
 
@@ -652,7 +694,6 @@ const App = ({ google }) => {
               {process.env.NODE_ENV !== "production" && (
                 <DisplayFormikState {...formik} />
               )}
-
             </Column>
             <Column></Column>
           </Container>
