@@ -64,6 +64,9 @@ def reporte_denuncias():
         }).sort('_id', ASCENDING):
         ts = d['_id'].generation_time
         point = d['coordenadas']['coordinates']
+        custom_fields = {}
+        if 'custom_fields' in d:
+            custom_fields = d['custom_fields']
         obj = {
             '_id': str(d['_id']),
             'coordenadas': point,
@@ -72,7 +75,8 @@ def reporte_denuncias():
             'denunciante': d['nombre'] + ' ' + d['apellido'],
             'observaciones': d['observaciones'],
             'creado': int(ts.timestamp()),
-            'estado': d['estado']
+            'estado': d['estado'],
+            'campos': custom_fields
         }
         objects.append(obj)
     return jsonify(objects)
