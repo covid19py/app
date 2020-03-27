@@ -27,7 +27,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import customFields from "./customFields.json";
+import customFields from "./custom_fields_v2.json";
 
 class CustomForm extends React.Component {
   // constructor(props) {
@@ -91,10 +91,10 @@ const validationSchema = Yup.object().shape({
 
 const App = ({ google }) => {
   let { latitude, longitude, error } = usePosition();
-  if (error !== null) {
-    latitude = -25.2966808;
-    longitude = -57.6683016;
-  }
+  // if (error !== null) {
+  //   latitude = -25.2966808;
+  //   longitude = -57.6683016;
+  // }
 
   const formik = useFormik({
     initialValues: {
@@ -239,35 +239,23 @@ const App = ({ google }) => {
     if (hasCustomField) {
       const hasSections = customFields[values.tipo_denuncia].sections;
       if (hasSections) {
-        // const mappedFields = hasSections.map(section => {
-        //   return {
-        //     [section.name]: {
-
-        //     }
-        //   }
-        // })
-
-        setFieldValue(
-          "custom_fields",
-          customFields[values.tipo_denuncia].sections,
-          false
-        );
-        setShowCustomFields(true);
+        // setFieldValue(
+        //   "custom_fields",
+        //   customFields[values.tipo_denuncia].sections,
+        //   false
+        // );
+        setShowCustomFields(customFields[values.tipo_denuncia].sections);
       }
     }
   }, [setFieldValue, values.tipo_denuncia]);
 
-  const handleCustomFieldChange = () => {
-    debugger;
-  };
-
-  const renderField = field => {
+  const renderField = (field, id) => {
     switch (field.type) {
       case "checkbox":
         return (
           <Label>
             <Checkbox
-              id={field.name}
+              id={id}
               value=""
               onChange={() => {
                 debugger;
@@ -278,17 +266,17 @@ const App = ({ google }) => {
               // value={this.fields[field.name] || ""}
               // onChange={this.handleChange}
             />
-            {field.name}
+            {field.label}
           </Label>
         );
 
       case "text":
         return (
           <Field>
-            <Label htmlFor={field.name}>{field.name}</Label>
+            <Label htmlFor={field.label}>{field.label}</Label>
             <Input
               autoComplete="off"
-              name={field.name}
+              name={field.label}
               // value={this.fields[field.name] || ""}
               type="text"
               onChange={() => {
@@ -303,18 +291,21 @@ const App = ({ google }) => {
   };
 
   const renderSections = sections => {
-    if (Array.isArray(sections)) {
-      return sections.map((section, index) => (
+    const dynamicForm = Object.keys(sections).map((section, index) => {
+      const fields = sections[section].fields;
+      const fieldsKeys = Object.keys(sections[section].fields);
+      return (
         <Field key={index}>
-          <Label>{sections[index].name}</Label>
-          {sections[index].fields.map((field, fieldIndex) => (
-            <Field horizontal key={field.name}>
-              <Control>{renderField(field)}</Control>
+          <Label>{sections[section].label}</Label>
+          {fieldsKeys.map(field => (
+            <Field horizontal key={field}>
+              <Control>{renderField(fields[field], field)}</Control>
             </Field>
           ))}
         </Field>
-      ));
-    }
+      );
+    });
+    return dynamicForm;
   };
 
   return (
@@ -423,7 +414,7 @@ const App = ({ google }) => {
                 </Field>
               </Box>
               {showCustomFields && (
-                <Box>{renderSections(values.custom_fields)}</Box>
+                <Box>{renderSections(showCustomFields)}</Box>
               )}
               <Box>
                 <Field horizontal>
