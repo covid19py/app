@@ -213,6 +213,8 @@ const App = ({ google }) => {
         setFieldValue("custom_fields", formValuesMapping, false);
         setShowCustomFields(sections);
       }
+    } else {
+      setShowCustomFields(null)
     }
   }, [setFieldValue, values.tipo_denuncia]);
 
