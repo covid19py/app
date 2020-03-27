@@ -25,6 +25,19 @@
             "type": "checkbox"
           }
         }
+      },
+      "local": {
+        "label": "Dentro del local",
+        "fields": {
+          "distancia": {
+            "label": "Se respeta la distancia de 2 metros entre empleados",
+            "type": "checkbox"
+          },
+          "alcohol_en_gel": {
+            "label": "Se proporciona alcohol en gel a cada empleado",
+            "type": "checkbox"
+          }
+        }
       }
     }
   }

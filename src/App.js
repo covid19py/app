@@ -239,17 +239,36 @@ const App = ({ google }) => {
     if (hasCustomField) {
       const hasSections = customFields[values.tipo_denuncia].sections;
       if (hasSections) {
-        // setFieldValue(
-        //   "custom_fields",
-        //   customFields[values.tipo_denuncia].sections,
-        //   false
-        // );
-        setShowCustomFields(customFields[values.tipo_denuncia].sections);
+        const sections = customFields[values.tipo_denuncia].sections;
+        const formValuesMapping = Object.keys(sections)
+          .map((section, index) => {
+            const fieldsKeys = Object.keys(sections[section].fields);
+            const mappedFields = fieldsKeys
+              .map(field => {
+                return {
+                  [field]: false
+                };
+              })
+              .reduce(function(acc, cur, i) {
+                acc[Object.keys(cur)] = cur[Object.keys(cur)];
+                return acc;
+              }, {});
+            const customFields = {
+              [section]: { ...mappedFields }
+            };
+            return customFields;
+          })
+          .reduce((acc, cur, i) => {
+            acc[Object.keys(cur)] = cur[Object.keys(cur)];
+            return acc
+          }, {});
+        setFieldValue("custom_fields", formValuesMapping, false);
+        setShowCustomFields(sections);
       }
     }
   }, [setFieldValue, values.tipo_denuncia]);
 
-  const renderField = (field, id) => {
+  const renderField = (field, id, section) => {
     switch (field.type) {
       case "checkbox":
         return (
@@ -258,6 +277,9 @@ const App = ({ google }) => {
               id={id}
               value=""
               onChange={() => {
+                const currentValue =
+                  values.custom_fields[section]["fields"][id];
+                console.log(currentValue);
                 debugger;
               }}
               type="checkbox"
@@ -299,7 +321,7 @@ const App = ({ google }) => {
           <Label>{sections[section].label}</Label>
           {fieldsKeys.map(field => (
             <Field horizontal key={field}>
-              <Control>{renderField(fields[field], field)}</Control>
+              <Control>{renderField(fields[field], field, section)}</Control>
             </Field>
           ))}
         </Field>
