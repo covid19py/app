@@ -145,7 +145,6 @@ const App = ({ google }) => {
         body: JSON.stringify(values, null, 2)
       }).then((res) => res.json())
         .then((data) => {
-          console.log("got", data)
           resetForm({ values: "" });
           NotificationManager.success('','Denuncia enviada');
           document.body.scrollTop = 0; // For Safari
