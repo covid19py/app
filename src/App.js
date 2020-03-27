@@ -139,6 +139,7 @@ const App = ({ google }) => {
     },
     onSubmit: async (values, { resetForm }) => {
       // await new Promise(resolve => setTimeout(resolve, 500));
+      console.log(values);
       fetch("/", {
         method: "post",
         headers: { "content-type": "application/json" },
