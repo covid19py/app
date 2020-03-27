@@ -29,72 +29,12 @@ import * as Yup from "yup";
 
 import customFields from "./custom_fields_v2.json";
 
-class CustomForm extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.handleChange = this.handleChange.bind(this);
-  //   this.fields = {};
-  // }
-  // handleChange = e => {
-  //   this.fields[e.target.name] = e.target.value;
-  //   this.props.setCustomFields(this.fields);
-  // };
-  renderField(field) {
-    switch (field.type) {
-      case "checkbox":
-        return (
-          <Checkbox
-            name={field.name}
-            value={this.fields[field.name] || ""}
-            onChange={this.handleChange}
-          />
-        );
-      case "text":
-        return (
-          <Input
-            name={field.name}
-            value={this.fields[field.name] || ""}
-            type="text"
-            onChange={this.handleChange}
-          />
-        );
-      default:
-        return null;
-    }
-  }
-  render() {
-    const fields = this.props.customFields[this.props.tipoDenuncia];
-    if (fields == null) {
-      return null;
-    }
-    const sections = fields["sections"];
-    if (sections == null) {
-      return null;
-    }
-    return sections.map((type, index) => (
-      <div key={index}>
-        <Label>{sections[index].name}</Label>
-        {sections[index].fields.map((field, fieldIndex) => (
-          <Field horizontal key={field.name}>
-            <Label>{field.name}</Label>
-            <Control>{this.renderField(field)}</Control>
-          </Field>
-        ))}
-      </div>
-    ));
-  }
-}
-
 const validationSchema = Yup.object().shape({
   correo: Yup.string().email("Invalid email")
 });
 
 const App = ({ google }) => {
   let { latitude, longitude, error } = usePosition();
-  // if (error !== null) {
-  //   latitude = -25.2966808;
-  //   longitude = -57.6683016;
-  // }
 
   const formik = useFormik({
     initialValues: {
@@ -260,7 +200,7 @@ const App = ({ google }) => {
           })
           .reduce((acc, cur, i) => {
             acc[Object.keys(cur)] = cur[Object.keys(cur)];
-            return acc
+            return acc;
           }, {});
         setFieldValue("custom_fields", formValuesMapping, false);
         setShowCustomFields(sections);
@@ -274,19 +214,16 @@ const App = ({ google }) => {
         return (
           <Label>
             <Checkbox
-              id={id}
-              value=""
+              id={`custom_fields.${section}.${id}`}
+              value={values.custom_fields[section][id]}
               onChange={() => {
-                const currentValue =
-                  values.custom_fields[section]["fields"][id];
-                console.log(currentValue);
-                debugger;
+                setFieldValue(
+                  `custom_fields.${section}.${id}`,
+                  !values.custom_fields[section][id],
+                  false
+                );
               }}
               type="checkbox"
-              // name={field.name}
-              // value=
-              // value={this.fields[field.name] || ""}
-              // onChange={this.handleChange}
             />
             {field.label}
           </Label>
@@ -299,11 +236,8 @@ const App = ({ google }) => {
             <Input
               autoComplete="off"
               name={field.label}
-              // value={this.fields[field.name] || ""}
               type="text"
-              onChange={() => {
-                debugger;
-              }}
+              onChange={() => {}}
             />
           </Field>
         );
