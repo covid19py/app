@@ -22,8 +22,6 @@ import "react-notifications/lib/notifications.css";
 import { DisplayFormikState } from "./helper";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 
-import { usePosition } from "use-position";
-
 import {
   NotificationContainer,
   NotificationManager
