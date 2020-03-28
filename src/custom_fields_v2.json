@@ -52,5 +52,34 @@
         "type": "text"
       }
     }
+  },
+  "sintomas": {
+    "sections": {
+      "sintomas": {
+        "label": "Síntomas",
+        "fields": {
+          "secreciones": {
+            "label": "Secreciones nasales",
+            "type": "checkbox"
+          },
+          "dolor_garganta": {
+            "label": "Dolor de garganta",
+            "type": "checkbox"
+          },
+          "tos": {
+            "label": "Tos",
+            "type": "checkbox"
+          },
+          "fiebre": {
+            "label": "Fiebre",
+            "type": "checkbox"
+          },
+          "difcultad_respirar": {
+            "label": "Dificultad para respirar",
+            "type": "checkbox"
+          }
+        }
+      }
+    }
   }
 }
