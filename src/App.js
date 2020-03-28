@@ -38,6 +38,8 @@ const validationSchema = Yup.object().shape({
   correo: Yup.string().email("Invalid email")
 });
 
+const postUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8080/' : '/'
+
 const App = ({ google }) => {
   let { latitude, longitude, error } = usePosition();
 
@@ -60,7 +62,7 @@ const App = ({ google }) => {
       custom_fields: {}
     },
     onSubmit: async (values, { resetForm }) => {
-      fetch("/", {
+      fetch(postUrl, {
         method: "post",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(values, null, 2)
