@@ -1,19 +1,10 @@
 $(document).ready(function () {
-<<<<<<< HEAD
     var asu = { lat: -23.4321899, lng: -58.3263222 },
         //var asu = { lat: -25.29066, lng: -57.50591 },
         map = new google.maps.Map(
             document.getElementById('map'),
             { zoom: 6, center: asu }),
         //{ zoom: 12, center: asu }),
-=======
-    var asu = {lat: -23.4321899, lng: -58.3263222},
-    //var asu = { lat: -25.29066, lng: -57.50591 },
-        map = new google.maps.Map(
-            document.getElementById('map'),
-            {zoom: 6, center: asu}),
-            //{ zoom: 12, center: asu }),
->>>>>>> f1788e36c940bae9a507a1bc036a492e6fee698c
         markers = {}
     // window.map = map
     var markerSzW = 30,
@@ -48,8 +39,8 @@ $(document).ready(function () {
         $('.detalle_denuncia #denunciante').text(datos['denunciante'])
         $('.detalle_denuncia textarea').text(datos['observaciones'])
         $('.detalle_denuncia #fecha').text(datos['creado'].format('DD/MM/YY HH:mm'))
-        for(i in datos['campos']) {
-            var li = '<p><b>' + i + '</b> ' + datos['campos'][i]  + '</p>'
+        for (i in datos['campos']) {
+            var li = '<p><b>' + i + '</b> ' + datos['campos'][i] + '</p>'
             $('.detalle_denuncia #denuncia_campos').append(li)
         }
         marker.setIcon(activeMarkerIcon)
@@ -58,6 +49,7 @@ $(document).ready(function () {
     }
 
     var baseCol = $('.base_col')
+
     function newCol(marker) {
         var col = baseCol.clone(),
             datos = marker.get('datos')
@@ -69,10 +61,16 @@ $(document).ready(function () {
         fechaElem.text(datos['creado'].format('DD/MM/YY HH:mm'))
         tipoElem = col.find('.tipo')
         tipoElem.text(datos['tipo_denuncia'])
-        dptoElem = col.find('.departamento')
-        dptoElem.text(datos['departamento'])
-        ciudadElem = col.find('.ciudad')
-        ciudadElem.text(datos['ciudad'])
+
+        getDepartament(marker.datos).then(function (success) {
+            dptoElem = col.find('.departamento')
+            dptoElem.text(success.departamento)
+            ciudadElem = col.find('.ciudad')
+            ciudadElem.text(success.ciudad)
+        }, function (error) {
+            console.log(error);
+        });
+        
         ubicarElem = col.find('a')
         ubicarElem.on('click', function () {
             markerFocus(marker)
@@ -123,16 +121,6 @@ $(document).ready(function () {
                         map: map,
                         icon: inactiveMarkerIcon
                     });
-                    let geocoder = new google.maps.Geocoder();
-                    geocoder.geocode({ 'location': point }, function (results, status) {
-                        if (status === 'OK') {
-                            let region = results.length - 2;
-                            let dpto = results[region].address_components[0].long_name;
-                            d['departamento'] = dpto.substring(dpto.lastIndexOf(" ")).trim();
-                            //console.log(d.departamento)
-                            //ver como retornar el departamento
-                        }
-                    });
 
                     markers[id] = marker
                     marker.set('datos', d)
@@ -161,6 +149,28 @@ $(document).ready(function () {
         $.get(url, function () {
         })
     })
+
+    let getDepartament = function (data) {
+        return new Promise((resolve, reject) => {
+            let point = new google.maps.LatLng(data['coordenadas'][0], data['coordenadas'][1])
+            let geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'location': point }, function (results, status) {
+                if (status === 'OK') {
+                    let region = results.length - 2;
+                    let dpto = results[region].address_components[0].long_name;
+                    let json = {
+                        departamento: dpto.substring(dpto.lastIndexOf(" ")).trim(),
+                        ciudad: results[region - 1].address_components[0].long_name.trim()
+                    };
+                    resolve(json);
+                    //console.log(d.departamento)
+                    //ver como retornar el departamento
+                } else {
+                    reject("error");
+                }
+            });
+        });
+    }
 
     // syncMarkers()
     setInterval(syncMarkers, 2000)
