@@ -34,6 +34,24 @@ import * as Yup from "yup";
 
 import customFields from "./custom_fields_v2.json";
 
+const formInitialValues = {
+  canal: "Llamada",
+  nombre: "",
+  apellido: "",
+  telefono: "",
+  correo: "",
+  place: "",
+  street: "",
+  neighborhood: "",
+  city: "",
+  department: "",
+  tipo_denuncia: "aglomeracion",
+  observaciones: "",
+  coordenadas: null,
+  estado: "pendiente",
+  custom_fields: {}
+};
+
 const validationSchema = Yup.object().shape({
   correo: Yup.string().email("Invalid email")
 });
@@ -42,9 +60,9 @@ const postUrl =
   process.env.NODE_ENV !== "production" ? "http://localhost:8080/" : "/";
 
 const App = ({ google }) => {
-  let { latitude, longitude, error } = usePosition();
 
   const [markerPosition, setMarkerPosition] = useState(null);
+  const [initialLatLng, setInitialLatLng] = useState({});
   const [place, setPlace] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
@@ -52,23 +70,7 @@ const App = ({ google }) => {
   const [showCustomFields, setShowCustomFields] = useState(null);
 
   const formik = useFormik({
-    initialValues: {
-      canal: "Llamada",
-      nombre: "",
-      apellido: "",
-      telefono: "",
-      correo: "",
-      place: "",
-      street: "",
-      neighborhood: "",
-      city: "",
-      department: "",
-      tipo_denuncia: "aglomeracion",
-      observaciones: "",
-      coordenadas: null,
-      estado: "pendiente",
-      custom_fields: {}
-    },
+    initialValues: { ...formInitialValues },
     onSubmit: async (values, { resetForm }) => {
       fetch(postUrl, {
         method: "post",
@@ -78,6 +80,7 @@ const App = ({ google }) => {
         .then(res => res.json())
         .then(data => {
           NotificationManager.success("", "Denuncia enviada");
+          resetForm(...formInitialValues);
           document.body.scrollTop = 0; // For Safari
           document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         })
@@ -98,7 +101,6 @@ const App = ({ google }) => {
     setFieldValue
   } = formik;
 
-  const positionAvailable = latitude && longitude;
   const mapRef = useRef(null);
   const autocomplete = useRef(null);
   const autocompleteService = useRef(null);
@@ -161,8 +163,13 @@ const App = ({ google }) => {
   };
 
   useEffect(() => {
-    setMarkerPosition({ lat: latitude, lng: longitude });
-  }, [latitude, longitude]);
+    const latLng = {
+      lat: parseFloat(-25.3006592),
+      lng: parseFloat(-57.63591)
+    };
+    setInitialLatLng(latLng);
+    setMarkerPosition(latLng);
+  }, []);
 
   const fetchPlaces = (mapProps, map) => {
     const { google } = mapProps;
@@ -620,38 +627,29 @@ const App = ({ google }) => {
 
               <Box>
                 <Field>
-                  {positionAvailable ? (
-                    <>
-                      <Label htmlFor="complaintType">Ubicación</Label>
-                      <Map
-                        ref={mapRef}
-                        google={google}
-                        containerStyle={{
-                          height: "40vh",
-                          width: "100%",
-                          position: "relative"
-                        }}
-                        initialCenter={{
-                          lat: latitude,
-                          lng: longitude
-                        }}
-                        center={markerPosition}
-                        onClick={markerHandler}
-                        onReady={fetchPlaces}
-                        zoom={15}
-                      >
-                        <Marker
-                          onClick={() => console.log("clicked")}
-                          name={"Current location"}
-                          position={markerPosition}
-                          draggable={true}
-                          onDragend={markerHandler}
-                        />
-                      </Map>
-                    </>
-                  ) : (
-                    <Label>Cargando...</Label>
-                  )}
+                  <Label htmlFor="complaintType">Ubicación</Label>
+                  <Map
+                    ref={mapRef}
+                    google={google}
+                    containerStyle={{
+                      height: "40vh",
+                      width: "100%",
+                      position: "relative"
+                    }}
+                    initialCenter={initialLatLng}
+                    center={markerPosition}
+                    onClick={markerHandler}
+                    onReady={fetchPlaces}
+                    zoom={15}
+                  >
+                    <Marker
+                      onClick={() => console.log("clicked")}
+                      name={"Current location"}
+                      position={markerPosition}
+                      draggable={true}
+                      onDragend={markerHandler}
+                    />
+                  </Map>
                 </Field>
               </Box>
 
