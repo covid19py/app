@@ -38,10 +38,18 @@ const validationSchema = Yup.object().shape({
   correo: Yup.string().email("Invalid email")
 });
 
-const postUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8080/' : '/'
+const postUrl =
+  process.env.NODE_ENV !== "production" ? "http://localhost:8080/" : "/";
 
 const App = ({ google }) => {
   let { latitude, longitude, error } = usePosition();
+
+  const [markerPosition, setMarkerPosition] = useState(null);
+  const [place, setPlace] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [showCustomFields, setShowCustomFields] = useState(null);
 
   const formik = useFormik({
     initialValues: {
@@ -69,7 +77,6 @@ const App = ({ google }) => {
       })
         .then(res => res.json())
         .then(data => {
-          resetForm({ values: "" });
           NotificationManager.success("", "Denuncia enviada");
           document.body.scrollTop = 0; // For Safari
           document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
@@ -90,13 +97,6 @@ const App = ({ google }) => {
     handleReset,
     setFieldValue
   } = formik;
-
-  const [markerPosition, setMarkerPosition] = useState(null);
-  const [place, setPlace] = useState("");
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
-  const [showCustomFields, setShowCustomFields] = useState(null);
 
   const positionAvailable = latitude && longitude;
   const mapRef = useRef(null);
@@ -240,6 +240,7 @@ const App = ({ google }) => {
   }, [setFieldValue, values.tipo_denuncia]);
 
   const renderField = (field, id, section) => {
+    debugger;
     switch (field.type) {
       case "checkbox":
         return (
