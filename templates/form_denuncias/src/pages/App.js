@@ -19,8 +19,8 @@ import {
 
 import "./App.css";
 import "react-notifications/lib/notifications.css";
-import { DisplayFormikState } from "./helper";
-import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
+import { DisplayFormikState } from "../helpers";
+import MapContainer from "../components/MapContainer";
 
 import {
   NotificationContainer,
@@ -30,7 +30,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import customFields from "./custom_fields_v2.json";
+import customFields from "../../../../schemas/custom_fields_v2.json";
 
 const formInitialValues = {
   canal: "Llamada",
@@ -59,17 +59,14 @@ const postUrl =
     ? `${process.env.REACT_APP_API_URL}/`
     : "/";
 
-const App = ({ google }) => {
-  const [markerPosition, setMarkerPosition] = useState(null);
-  const [initialLatLng, setInitialLatLng] = useState({
-    lat: "",
-    lng: ""
-  });
+const App = () => {
   const [place, setPlace] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [showCustomFields, setShowCustomFields] = useState(null);
+
+  const autocompleteEl = useRef(null);
 
   const formik = useFormik({
     initialValues: { ...formInitialValues },
@@ -82,7 +79,7 @@ const App = ({ google }) => {
         .then(res => res.json())
         .then(data => {
           NotificationManager.success("", "Denuncia enviada");
-          setShowCustomFields(null)
+          setShowCustomFields(null);
           resetForm({ ...formInitialValues });
           document.body.scrollTop = 0; // For Safari
           document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
@@ -91,6 +88,7 @@ const App = ({ google }) => {
     },
     validationSchema
   });
+
   const {
     values,
     touched,
@@ -103,96 +101,6 @@ const App = ({ google }) => {
     handleReset,
     setFieldValue
   } = formik;
-
-  const mapRef = useRef(null);
-  const autocomplete = useRef(null);
-  const autocompleteService = useRef(null);
-  const geocoder = useRef(null);
-  const autocompleteEl = useRef(null);
-
-  const callGeocoderAPI = ({ latlng }) => {
-    geocoder.current.geocode({ location: latlng }, function(results, status) {
-      if (status === "OK") {
-        if (results[0]) {
-          setStreet(results[0].formatted_address);
-          setFieldValue("street", results[0].formatted_address, true);
-          const addressComponents = results[0].address_components;
-          const city = addressComponents.find(component => {
-            return component.types.find(type => type === "locality");
-          });
-          const country = addressComponents.find(component => {
-            return component.types.find(type => type === "country");
-          });
-          setCity(city.long_name);
-          setCountry(country.long_name);
-          setFieldValue("city", city.long_name, true);
-        }
-      } else {
-        console.error("Geocoder failed due to: " + status);
-      }
-    });
-  };
-
-  const placeChangedHandler = () => {
-    //* This only have data when a place is selected from autcomplete dropdown
-    try {
-      const place = autocomplete.current.getPlace();
-      const location = place.geometry.location;
-      if (place) {
-        const latlng = {
-          lat: parseFloat(location.lat()),
-          lng: parseFloat(location.lng())
-        };
-        setPlace(place.name);
-        setFieldValue("coordenadas", latlng, true);
-        setFieldValue("place", place.name, true);
-        callGeocoderAPI({ latlng });
-        setMarkerPosition(latlng);
-      }
-    } catch (err) {
-      setPlace(autocompleteEl.current.value);
-      console.error(err);
-    }
-  };
-
-  const markerHandler = (mapProps, map, e) => {
-    const latlng = {
-      lat: parseFloat(e.latLng.lat()),
-      lng: parseFloat(e.latLng.lng())
-    };
-    setFieldValue("coordenadas", latlng, true);
-    callGeocoderAPI({ latlng });
-    setMarkerPosition(latlng);
-  };
-
-  useEffect(() => {
-    const latLng = {
-      lat: -25.30065,
-      lng: -57.63591
-    };
-    setInitialLatLng(latLng);
-    setMarkerPosition(latLng);
-  }, []);
-
-  const fetchPlaces = (mapProps, map) => {
-    const { google } = mapProps;
-
-    const options = {
-      types: [],
-      componentRestrictions: { country: "py" }
-    };
-
-    geocoder.current = new google.maps.Geocoder();
-
-    autocomplete.current = new google.maps.places.Autocomplete(
-      autocompleteEl.current,
-      options
-    );
-
-    autocompleteService.current = new google.maps.places.AutocompleteService();
-
-    autocomplete.current.addListener("place_changed", placeChangedHandler);
-  };
 
   useEffect(() => {
     const hasCustomField = customFields[values.tipo_denuncia];
@@ -630,28 +538,14 @@ const App = ({ google }) => {
               <Box>
                 <Field>
                   <Label htmlFor="complaintType">Ubicación</Label>
-                  <Map
-                    ref={mapRef}
-                    google={google}
-                    containerStyle={{
-                      height: "40vh",
-                      width: "100%",
-                      position: "relative"
-                    }}
-                    initialCenter={initialLatLng}
-                    center={markerPosition}
-                    onClick={markerHandler}
-                    onReady={fetchPlaces}
-                    zoom={15}
-                  >
-                    <Marker
-                      onClick={() => console.log("clicked")}
-                      name={"Current location"}
-                      position={markerPosition}
-                      draggable={true}
-                      onDragend={markerHandler}
-                    />
-                  </Map>
+                  <MapContainer
+                    setFieldValue={setFieldValue}
+                    setStreet={setStreet}
+                    setCity={setCity}
+                    setCountry={setCountry}
+                    setPlace={setPlace}
+                    autocompleteEl={autocompleteEl}
+                  />
                 </Field>
               </Box>
 
@@ -715,8 +609,4 @@ const App = ({ google }) => {
   );
 };
 
-export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GMAPS_API_KEY, // google maps key
-  language: "es-419",
-  libraries: ["places"]
-})(App);
+export default App;
