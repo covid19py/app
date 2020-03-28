@@ -253,8 +253,9 @@ const App = ({ google }) => {
     switch (field.type) {
       case "checkbox":
         return (
-          <Label>
+          <Label style={{ lineHeight: 3}}>
             <Checkbox
+              style={{ width: 20, height: 20, verticalAlign: 'middle' }}
               id={`custom_fields.${section}.${id}`}
               value={values.custom_fields[section][id]}
               onChange={() => {
@@ -266,7 +267,7 @@ const App = ({ google }) => {
               }}
               type="checkbox"
             />
-            {field.label}
+            &nbsp;{field.label}
           </Label>
         );
 
@@ -274,6 +275,7 @@ const App = ({ google }) => {
         return (
           <Field>
             <Label htmlFor={`custom_fields.${id}`}>{field.label}</Label>
+            <Control>
             <Input
               id={`custom_fields.${id}`}
               value={values.custom_fields[id]}
@@ -284,6 +286,7 @@ const App = ({ google }) => {
                 setFieldValue(`custom_fields.${id}`, e.target.value, false);
               }}
             />
+            </Control>
           </Field>
         );
       default:
@@ -327,9 +330,9 @@ const App = ({ google }) => {
       if (hasType && hasLabel) {
         return (
           <Field key={index}>
-            <Field horizontal key={section}>
-              <Control>{renderField(sections[section], section, null)}</Control>
-            </Field>
+            <Field.Body horizontal key={section}>
+              {renderField(sections[section], section, null)}
+            </Field.Body>
           </Field>
         );
       }
@@ -443,7 +446,11 @@ const App = ({ google }) => {
                 </Field>
               </Box>
               {showCustomFields && (
-                <Box>{renderSections(showCustomFields)}</Box>
+                <Box>
+                  <Field horizontal>
+                    <Field.Body>{renderSections(showCustomFields)}</Field.Body>
+                  </Field> 
+                </Box>
               )}
               <Box>
                 <Field horizontal>
