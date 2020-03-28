@@ -82,7 +82,8 @@ const App = ({ google }) => {
         .then(res => res.json())
         .then(data => {
           NotificationManager.success("", "Denuncia enviada");
-          resetForm(...formInitialValues);
+          setShowCustomFields(null)
+          resetForm({ ...formInitialValues });
           document.body.scrollTop = 0; // For Safari
           document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         })
@@ -249,7 +250,6 @@ const App = ({ google }) => {
   }, [setFieldValue, values.tipo_denuncia]);
 
   const renderField = (field, id, section) => {
-    debugger;
     switch (field.type) {
       case "checkbox":
         return (
