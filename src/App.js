@@ -238,7 +238,6 @@ const App = ({ google }) => {
   }, [setFieldValue, values.tipo_denuncia]);
 
   const renderField = (field, id, section) => {
-    debugger
     switch (field.type) {
       case "checkbox":
         return (
@@ -262,12 +261,16 @@ const App = ({ google }) => {
       case "text":
         return (
           <Field>
-            <Label htmlFor={field.label}>{field.label}</Label>
+            <Label htmlFor={`custom_fields.${id}`}>{field.label}</Label>
             <Input
+              id={`custom_fields.${id}`}
+              value={values.custom_fields[id]}
               autoComplete="off"
-              name={field.label}
+              name={`custom_fields.${id}`}
               type="text"
-              onChange={() => {}}
+              onChange={e => {
+                setFieldValue(`custom_fields.${id}`, e.target.value, false);
+              }}
             />
           </Field>
         );
@@ -312,9 +315,8 @@ const App = ({ google }) => {
       if (hasType && hasLabel) {
         return (
           <Field key={index}>
-            {/* <Label>{sections[section].label}</Label> */}
             <Field horizontal key={section}>
-              <Control>{renderField(sections[section], null, null)}</Control>
+              <Control>{renderField(sections[section], section, null)}</Control>
             </Field>
           </Field>
         );
