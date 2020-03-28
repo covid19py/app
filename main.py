@@ -1,10 +1,14 @@
 from flask import Flask, request, render_template, send_from_directory, jsonify
+from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo, ASCENDING, DESCENDING
 from bson.objectid import ObjectId
 
 from flask_json_schema import JsonSchema
 
 app = Flask(__name__, static_url_path='', template_folder='templates')
+
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 from os import environ
 if 'MONGO_URI' in environ:
@@ -34,6 +38,7 @@ def favicon():
     return send_from_directory('build', 'favicon.ico')
 
 @app.route('/', methods=['POST'])
+@cross_origin()
 def post():
     req_data = request.get_json()
     # Cargar coordenadas como Point (GeoJSON)
