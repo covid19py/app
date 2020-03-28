@@ -190,21 +190,40 @@ const App = ({ google }) => {
         const sections = customFields[values.tipo_denuncia].sections;
         const formValuesMapping = Object.keys(sections)
           .map((section, index) => {
-            const fieldsKeys = Object.keys(sections[section].fields);
-            const mappedFields = fieldsKeys
-              .map(field => {
-                return {
-                  [field]: false
-                };
-              })
-              .reduce(function(acc, cur, i) {
-                acc[Object.keys(cur)] = cur[Object.keys(cur)];
-                return acc;
-              }, {});
-            const customFields = {
-              [section]: { ...mappedFields }
-            };
-            return customFields;
+            const hasFields = Object.prototype.hasOwnProperty.call(
+              sections[section],
+              "fields"
+            );
+            const hasType = Object.prototype.hasOwnProperty.call(
+              sections[section],
+              "type"
+            );
+            const hasLabel = Object.prototype.hasOwnProperty.call(
+              sections[section],
+              "label"
+            );
+            if (hasFields) {
+              const fieldsKeys = Object.keys(sections[section].fields);
+              const mappedFields = fieldsKeys
+                .map(field => {
+                  return {
+                    [field]: false
+                  };
+                })
+                .reduce(function(acc, cur, i) {
+                  acc[Object.keys(cur)] = cur[Object.keys(cur)];
+                  return acc;
+                }, {});
+              const customFields = {
+                [section]: { ...mappedFields }
+              };
+              return customFields;
+            }
+            if (hasType && hasLabel) {
+              return {
+                [section]: ""
+              };
+            }
           })
           .reduce((acc, cur, i) => {
             acc[Object.keys(cur)] = cur[Object.keys(cur)];
@@ -214,11 +233,12 @@ const App = ({ google }) => {
         setShowCustomFields(sections);
       }
     } else {
-      setShowCustomFields(null)
+      setShowCustomFields(null);
     }
   }, [setFieldValue, values.tipo_denuncia]);
 
   const renderField = (field, id, section) => {
+    debugger
     switch (field.type) {
       case "checkbox":
         return (
@@ -258,18 +278,47 @@ const App = ({ google }) => {
 
   const renderSections = sections => {
     const dynamicForm = Object.keys(sections).map((section, index) => {
-      const fields = sections[section].fields;
-      const fieldsKeys = Object.keys(sections[section].fields);
-      return (
-        <Field key={index}>
-          <Label>{sections[section].label}</Label>
-          {fieldsKeys.map(field => (
-            <Field horizontal key={field}>
-              <Control>{renderField(fields[field], field, section)}</Control>
-            </Field>
-          ))}
-        </Field>
+      const hasFields = Object.prototype.hasOwnProperty.call(
+        sections[section],
+        "fields"
       );
+
+      const hasType = Object.prototype.hasOwnProperty.call(
+        sections[section],
+        "type"
+      );
+      const hasLabel = Object.prototype.hasOwnProperty.call(
+        sections[section],
+        "label"
+      );
+
+      if (hasFields) {
+        const fields = sections[section].fields;
+
+        const fieldsKeys = Object.keys(sections[section].fields);
+
+        return (
+          <Field key={index}>
+            <Label>{sections[section].label}</Label>
+            {fieldsKeys.map(field => (
+              <Field horizontal key={field}>
+                <Control>{renderField(fields[field], field, section)}</Control>
+              </Field>
+            ))}
+          </Field>
+        );
+      }
+
+      if (hasType && hasLabel) {
+        return (
+          <Field key={index}>
+            {/* <Label>{sections[section].label}</Label> */}
+            <Field horizontal key={section}>
+              <Control>{renderField(sections[section], null, null)}</Control>
+            </Field>
+          </Field>
+        );
+      }
     });
     return dynamicForm;
   };
