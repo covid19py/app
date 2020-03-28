@@ -1,10 +1,10 @@
 $(document).ready(function () {
-    // var asu = {lat: -23.30066, lng: -57.63591}
-    var asu = { lat: -25.29066, lng: -57.50591 },
+    var asu = {lat: -23.4321899, lng: -58.3263222},
+    //var asu = { lat: -25.29066, lng: -57.50591 },
         map = new google.maps.Map(
             document.getElementById('map'),
-            // {zoom: 6.2, center: asu}
-            { zoom: 12, center: asu }),
+            {zoom: 6, center: asu}),
+            //{ zoom: 12, center: asu }),
         markers = {}
     // window.map = map
     var markerSzW = 30,

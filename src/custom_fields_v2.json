@@ -40,5 +40,17 @@
         }
       }
     }
+  },
+  "incumplimiento_cuarentena": {
+    "sections": {
+      "zona": {
+        "label": "Zona/lugar",
+        "type": "text"
+      },
+      "numero_personas": {
+        "label": "Numero aproximado de personas",
+        "type": "text"
+      }
+    }
   }
 }

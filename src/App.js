@@ -18,11 +18,16 @@ import {
 } from "rbx";
 
 import "./App.css";
+import "react-notifications/lib/notifications.css";
 import { DisplayFormikState } from "./helper";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 
 import { usePosition } from "use-position";
 
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
 import React, { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -63,6 +68,9 @@ const App = ({ google }) => {
         .then(res => res.json())
         .then(data => {
           resetForm({ values: "" });
+          NotificationManager.success("", "Denuncia enviada");
+          document.body.scrollTop = 0; // For Safari
+          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         })
         .catch(err => console.log(err));
     },
@@ -182,21 +190,40 @@ const App = ({ google }) => {
         const sections = customFields[values.tipo_denuncia].sections;
         const formValuesMapping = Object.keys(sections)
           .map((section, index) => {
-            const fieldsKeys = Object.keys(sections[section].fields);
-            const mappedFields = fieldsKeys
-              .map(field => {
-                return {
-                  [field]: false
-                };
-              })
-              .reduce(function(acc, cur, i) {
-                acc[Object.keys(cur)] = cur[Object.keys(cur)];
-                return acc;
-              }, {});
-            const customFields = {
-              [section]: { ...mappedFields }
-            };
-            return customFields;
+            const hasFields = Object.prototype.hasOwnProperty.call(
+              sections[section],
+              "fields"
+            );
+            const hasType = Object.prototype.hasOwnProperty.call(
+              sections[section],
+              "type"
+            );
+            const hasLabel = Object.prototype.hasOwnProperty.call(
+              sections[section],
+              "label"
+            );
+            if (hasFields) {
+              const fieldsKeys = Object.keys(sections[section].fields);
+              const mappedFields = fieldsKeys
+                .map(field => {
+                  return {
+                    [field]: false
+                  };
+                })
+                .reduce(function(acc, cur, i) {
+                  acc[Object.keys(cur)] = cur[Object.keys(cur)];
+                  return acc;
+                }, {});
+              const customFields = {
+                [section]: { ...mappedFields }
+              };
+              return customFields;
+            }
+            if (hasType && hasLabel) {
+              return {
+                [section]: ""
+              };
+            }
           })
           .reduce((acc, cur, i) => {
             acc[Object.keys(cur)] = cur[Object.keys(cur)];
@@ -205,6 +232,8 @@ const App = ({ google }) => {
         setFieldValue("custom_fields", formValuesMapping, false);
         setShowCustomFields(sections);
       }
+    } else {
+      setShowCustomFields(null);
     }
   }, [setFieldValue, values.tipo_denuncia]);
 
@@ -232,12 +261,16 @@ const App = ({ google }) => {
       case "text":
         return (
           <Field>
-            <Label htmlFor={field.label}>{field.label}</Label>
+            <Label htmlFor={`custom_fields.${id}`}>{field.label}</Label>
             <Input
+              id={`custom_fields.${id}`}
+              value={values.custom_fields[id]}
               autoComplete="off"
-              name={field.label}
+              name={`custom_fields.${id}`}
               type="text"
-              onChange={() => {}}
+              onChange={e => {
+                setFieldValue(`custom_fields.${id}`, e.target.value, false);
+              }}
             />
           </Field>
         );
@@ -248,18 +281,46 @@ const App = ({ google }) => {
 
   const renderSections = sections => {
     const dynamicForm = Object.keys(sections).map((section, index) => {
-      const fields = sections[section].fields;
-      const fieldsKeys = Object.keys(sections[section].fields);
-      return (
-        <Field key={index}>
-          <Label>{sections[section].label}</Label>
-          {fieldsKeys.map(field => (
-            <Field horizontal key={field}>
-              <Control>{renderField(fields[field], field, section)}</Control>
-            </Field>
-          ))}
-        </Field>
+      const hasFields = Object.prototype.hasOwnProperty.call(
+        sections[section],
+        "fields"
       );
+
+      const hasType = Object.prototype.hasOwnProperty.call(
+        sections[section],
+        "type"
+      );
+      const hasLabel = Object.prototype.hasOwnProperty.call(
+        sections[section],
+        "label"
+      );
+
+      if (hasFields) {
+        const fields = sections[section].fields;
+
+        const fieldsKeys = Object.keys(sections[section].fields);
+
+        return (
+          <Field key={index}>
+            <Label>{sections[section].label}</Label>
+            {fieldsKeys.map(field => (
+              <Field horizontal key={field}>
+                <Control>{renderField(fields[field], field, section)}</Control>
+              </Field>
+            ))}
+          </Field>
+        );
+      }
+
+      if (hasType && hasLabel) {
+        return (
+          <Field key={index}>
+            <Field horizontal key={section}>
+              <Control>{renderField(sections[section], section, null)}</Control>
+            </Field>
+          </Field>
+        );
+      }
     });
     return dynamicForm;
   };
@@ -644,6 +705,7 @@ const App = ({ google }) => {
             </Column>
             <Column></Column>
           </Container>
+          <NotificationContainer />
         </Hero.Body>
       </Hero>
     </React.Fragment>
