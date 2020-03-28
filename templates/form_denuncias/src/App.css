@@ -1,0 +1,10 @@
+.field:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 768px) {
+  .navbar {
+    padding: 10px 0;
+    width: 100%;
+  }
+}
