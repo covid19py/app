@@ -1,10 +1,19 @@
 $(document).ready(function () {
+<<<<<<< HEAD
     var asu = { lat: -23.4321899, lng: -58.3263222 },
         //var asu = { lat: -25.29066, lng: -57.50591 },
         map = new google.maps.Map(
             document.getElementById('map'),
             { zoom: 6, center: asu }),
         //{ zoom: 12, center: asu }),
+=======
+    var asu = {lat: -23.4321899, lng: -58.3263222},
+    //var asu = { lat: -25.29066, lng: -57.50591 },
+        map = new google.maps.Map(
+            document.getElementById('map'),
+            {zoom: 6, center: asu}),
+            //{ zoom: 12, center: asu }),
+>>>>>>> f1788e36c940bae9a507a1bc036a492e6fee698c
         markers = {}
     // window.map = map
     var markerSzW = 30,
@@ -39,6 +48,10 @@ $(document).ready(function () {
         $('.detalle_denuncia #denunciante').text(datos['denunciante'])
         $('.detalle_denuncia textarea').text(datos['observaciones'])
         $('.detalle_denuncia #fecha').text(datos['creado'].format('DD/MM/YY HH:mm'))
+        for(i in datos['campos']) {
+            var li = '<p><b>' + i + '</b> ' + datos['campos'][i]  + '</p>'
+            $('.detalle_denuncia #denuncia_campos').append(li)
+        }
         marker.setIcon(activeMarkerIcon)
         map.setCenter(marker.getPosition())
         map.setZoom(15)
