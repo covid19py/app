@@ -55,12 +55,16 @@ const validationSchema = Yup.object().shape({
 });
 
 const postUrl =
-  process.env.NODE_ENV !== "production" ? "http://localhost:8080/" : "/";
+  process.env.NODE_ENV !== "production"
+    ? `${process.env.REACT_APP_API_URL}/`
+    : "/";
 
 const App = ({ google }) => {
-
   const [markerPosition, setMarkerPosition] = useState(null);
-  const [initialLatLng, setInitialLatLng] = useState({});
+  const [initialLatLng, setInitialLatLng] = useState({
+    lat: "",
+    lng: ""
+  });
   const [place, setPlace] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
@@ -162,8 +166,8 @@ const App = ({ google }) => {
 
   useEffect(() => {
     const latLng = {
-      lat: parseFloat(-25.3006592),
-      lng: parseFloat(-57.63591)
+      lat: -25.30065,
+      lng: -57.63591
     };
     setInitialLatLng(latLng);
     setMarkerPosition(latLng);
