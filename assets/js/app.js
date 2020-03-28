@@ -1,10 +1,10 @@
 $(document).ready(function () {
-    var asu = {lat: -23.4321899, lng: -58.3263222},
-    //var asu = { lat: -25.29066, lng: -57.50591 },
+    var asu = { lat: -23.4321899, lng: -58.3263222 },
+        //var asu = { lat: -25.29066, lng: -57.50591 },
         map = new google.maps.Map(
             document.getElementById('map'),
-            {zoom: 6, center: asu}),
-            //{ zoom: 12, center: asu }),
+            { zoom: 6, center: asu }),
+        //{ zoom: 12, center: asu }),
         markers = {}
     // window.map = map
     var markerSzW = 30,
@@ -80,8 +80,8 @@ $(document).ready(function () {
     function getBounds() {
         boundaries = map.getBounds()
         query = [
-            [ boundaries["Za"]["i"], boundaries["Ua"]["i"] ],
-            [ boundaries["Za"]["j"], boundaries["Ua"]["j"] ]
+            [boundaries["Za"]["i"], boundaries["Ua"]["i"]],
+            [boundaries["Za"]["j"], boundaries["Ua"]["j"]]
         ]
         return query
     }
@@ -94,12 +94,13 @@ $(document).ready(function () {
             data: JSON.stringify(boundaries),
             dataType: 'json',
             contentType: 'application/json'
-        }).done(function(data) {
+        }).done(function (data) {
             ids = [];
             for (i in data) {
                 var d = data[i],
                     id = d['_id']
                 ids.push(id)
+
                 // Agregar markers nuevos:
                 if (markers[id] == null) {
                     d['creado'] = moment(d['creado'] * 1000)
@@ -108,7 +109,18 @@ $(document).ready(function () {
                         position: point,
                         map: map,
                         icon: inactiveMarkerIcon
-                    })
+                    });
+                    let geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({ 'location': point }, function (results, status) {
+                        if (status === 'OK') {
+                            let region = results.length - 2;
+                            let dpto = results[region].address_components[0].long_name;
+                            d['departamento'] = dpto.substring(dpto.lastIndexOf(" ")).trim();
+                            //console.log(d.departamento)
+                            //ver como retornar el departamento
+                        }
+                    });
+
                     markers[id] = marker
                     marker.set('datos', d)
                     newCol(marker)
@@ -123,7 +135,7 @@ $(document).ready(function () {
                 if (ids.indexOf(id) == -1) {
                     m.setMap(null)
                     removeCol(m)
-                    delete(markers[id])
+                    delete (markers[id])
                 }
             }
         })
