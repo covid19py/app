@@ -2,7 +2,7 @@ import 'rbx/index.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './pages/App';
+import Form from './pages/Form';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Form />, document.getElementById('root'));
 
