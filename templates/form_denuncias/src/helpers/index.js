@@ -1,16 +1,19 @@
-import React from 'react';
+import React from "react";
 
-export const DisplayFormikState = props =>
-  <div style={{ margin: '1rem 0' }}>
-    <h3 style={{ fontFamily: 'monospace' }} />
+export const DisplayFormikState = props => (
+  <div style={{ margin: "1rem 0" }}>
+    <h3 style={{ fontFamily: "monospace" }} />
     <pre
       style={{
-        background: '#f6f8fa',
-        fontSize: '.65rem',
-        padding: '.5rem',
+        background: "#f6f8fa",
+        fontSize: ".65rem",
+        padding: ".5rem"
       }}
     >
-      <strong>props</strong> ={' '}
-      {JSON.stringify(props, null, 2)}
+      <strong>props</strong> = {JSON.stringify(props, null, 2)}
     </pre>
-  </div>;
+  </div>
+);
+
+export const hasProp = (obj, prop) =>
+  Object.prototype.hasOwnProperty.call(obj, prop);

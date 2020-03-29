@@ -19,7 +19,7 @@ import {
 
 import "./Form.css";
 import "react-notifications/lib/notifications.css";
-import { DisplayFormikState } from "../helpers";
+import { DisplayFormikState, hasProp } from "../helpers";
 import MapContainer from "../components/MapContainer";
 
 import {
@@ -110,18 +110,10 @@ const App = () => {
         const sections = customFields[values.tipo_denuncia].sections;
         const formValuesMapping = Object.keys(sections)
           .map((section, index) => {
-            const hasFields = Object.prototype.hasOwnProperty.call(
-              sections[section],
-              "fields"
-            );
-            const hasType = Object.prototype.hasOwnProperty.call(
-              sections[section],
-              "type"
-            );
-            const hasLabel = Object.prototype.hasOwnProperty.call(
-              sections[section],
-              "label"
-            );
+            const hasFields = hasProp(sections[section], "fields");
+            const hasType = hasProp(sections[section], "type");
+            const hasLabel = hasProp(sections[section], "label");
+
             if (hasFields) {
               const fieldsKeys = Object.keys(sections[section].fields);
               const mappedFields = fieldsKeys
@@ -203,19 +195,9 @@ const App = () => {
 
   const renderSections = sections => {
     const dynamicForm = Object.keys(sections).map((section, index) => {
-      const hasFields = Object.prototype.hasOwnProperty.call(
-        sections[section],
-        "fields"
-      );
-
-      const hasType = Object.prototype.hasOwnProperty.call(
-        sections[section],
-        "type"
-      );
-      const hasLabel = Object.prototype.hasOwnProperty.call(
-        sections[section],
-        "label"
-      );
+      const hasFields = hasProp(sections[section], "fields");
+      const hasType = hasProp(sections[section], "type");
+      const hasLabel = hasProp(sections[section], "label");
 
       if (hasFields) {
         const fields = sections[section].fields;
