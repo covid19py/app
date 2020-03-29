@@ -27,15 +27,19 @@ def send_assets(path):
 
 @app.route("/")
 def home():
-    return send_from_directory('build', 'index.html')
+    return render_template('form_denuncias/public/index.html')
 
 @app.route("/manifest.json")
 def manifest():
-    return send_from_directory('build', 'manifest.json')
+    return send_from_directory('templates/form_denuncias/public', 'manifest.json')
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory('build', 'favicon.ico')
+    return send_from_directory('templates/form_denuncias/public', 'favicon.ico')
+
+@app.route('/dist/<path:path>')
+def dist(path):
+    return send_from_directory('templates/form_denuncias/dist', path)
 
 @app.route('/', methods=['POST'])
 @cross_origin()
