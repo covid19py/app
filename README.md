@@ -1,6 +1,6 @@
 # Covid19-PY
 
-# Requisitos
+## Requisitos
 - Nodejs v12.x
 - Python 3.7
 - Mongo 4.x
