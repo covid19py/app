@@ -4,4 +4,5 @@ source $HOME/.nvm/nvm.sh
 nvm install v12
 nvm use v12
 npm install -g yarn
-npm install
+cd templates/form_denuncias
+yarn

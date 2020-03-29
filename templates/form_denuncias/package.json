@@ -19,7 +19,7 @@
   },
   "scripts": {
     "dev": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --mode development",
-    "start": "node_modules/webpack/bin/webpack.js --mode production"
+    "build": "node_modules/webpack/bin/webpack.js --mode production"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
