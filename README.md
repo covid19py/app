@@ -26,5 +26,6 @@ $ python3 -m flask run
 ``` bash
 $ cd templates/form_denuncias
 $ yarn build
-$ yarn build
 ```
+
+Después de compilar el server Python ya es capaz el template compilado desde `templates/form_denuncias/dist`
