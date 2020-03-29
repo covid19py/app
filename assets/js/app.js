@@ -39,6 +39,7 @@ $(document).ready(function () {
         $('.detalle_denuncia #denunciante').text(datos['denunciante'])
         $('.detalle_denuncia textarea').text(datos['observaciones'])
         $('.detalle_denuncia #fecha').text(datos['creado'].format('DD/MM/YY HH:mm'))
+        $('.detalle_denuncia #denuncia_campos').empty()
         for(i in datos['campos']) {
             var li = '<p><b>' + i + '</b> ' + datos['campos'][i]  + '</p>'
             $('.detalle_denuncia #denuncia_campos').append(li)
