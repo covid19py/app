@@ -17,7 +17,7 @@ import {
   Box
 } from "rbx";
 
-import "./App.css";
+import "./Form.css";
 import "react-notifications/lib/notifications.css";
 import { DisplayFormikState } from "../helpers";
 import MapContainer from "../components/MapContainer";
