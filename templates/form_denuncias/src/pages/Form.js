@@ -21,6 +21,7 @@ import "./Form.css";
 import "react-notifications/lib/notifications.css";
 import { DisplayFormikState, hasProp } from "../helpers";
 import MapContainer from "../components/MapContainer";
+import { SectionContainer } from "../components/SectionContainer";
 
 import {
   NotificationContainer,
@@ -54,7 +55,7 @@ const validationSchema = Yup.object().shape({
   correo: Yup.string().email("Invalid email")
 });
 
-const postUrl =
+const POST_URL =
   process.env.NODE_ENV !== "production"
     ? `${process.env.REACT_APP_API_URL}/`
     : "/";
@@ -71,7 +72,7 @@ const App = () => {
   const formik = useFormik({
     initialValues: { ...formInitialValues },
     onSubmit: (values, { resetForm }) => {
-      fetch(postUrl, {
+      fetch(POST_URL, {
         method: "post",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(values, null, 2)
@@ -148,86 +149,6 @@ const App = () => {
       setShowCustomFields(null);
     }
   }, [setFieldValue, values.tipo_denuncia]);
-
-  const renderField = (field, id, section) => {
-    switch (field.type) {
-      case "checkbox":
-        return (
-          <Label style={{ lineHeight: 3 }}>
-            <Checkbox
-              id={`custom_fields.${section}.${id}`}
-              value={values.custom_fields[section][id]}
-              onChange={() => {
-                setFieldValue(
-                  `custom_fields.${section}.${id}`,
-                  !values.custom_fields[section][id],
-                  false
-                );
-              }}
-              type="checkbox"
-            />
-            &nbsp;{field.label}
-          </Label>
-        );
-
-      case "text":
-        return (
-          <Field>
-            <Label htmlFor={`custom_fields.${id}`}>{field.label}</Label>
-            <Control>
-              <Input
-                id={`custom_fields.${id}`}
-                value={values.custom_fields[id]}
-                autoComplete="off"
-                name={`custom_fields.${id}`}
-                type="text"
-                onChange={e => {
-                  setFieldValue(`custom_fields.${id}`, e.target.value, false);
-                }}
-              />
-            </Control>
-          </Field>
-        );
-      default:
-        return null;
-    }
-  };
-
-  const renderSections = sections => {
-    const dynamicForm = Object.keys(sections).map((section, index) => {
-      const hasFields = hasProp(sections[section], "fields");
-      const hasType = hasProp(sections[section], "type");
-      const hasLabel = hasProp(sections[section], "label");
-
-      if (hasFields) {
-        const fields = sections[section].fields;
-
-        const fieldsKeys = Object.keys(sections[section].fields);
-
-        return (
-          <Field key={index}>
-            <Label>{sections[section].label}</Label>
-            {fieldsKeys.map(field => (
-              <Field horizontal key={field}>
-                <Control>{renderField(fields[field], field, section)}</Control>
-              </Field>
-            ))}
-          </Field>
-        );
-      }
-
-      if (hasType && hasLabel) {
-        return (
-          <Field key={index}>
-            <Field.Body horizontal key={section}>
-              <Control>{renderField(sections[section], section, null)}</Control>
-            </Field.Body>
-          </Field>
-        );
-      }
-    });
-    return dynamicForm;
-  };
 
   return (
     <React.Fragment>
@@ -337,7 +258,13 @@ const App = () => {
               {showCustomFields && (
                 <Box>
                   <Field horizontal>
-                    <Field.Body>{renderSections(showCustomFields)}</Field.Body>
+                    <Field.Body>
+                      <SectionContainer
+                        sections={showCustomFields}
+                        setFieldValue={setFieldValue}
+                        values={values}
+                      />
+                    </Field.Body>
                   </Field>
                 </Box>
               )}
