@@ -28,4 +28,4 @@ $ cd templates/form_denuncias
 $ yarn build
 ```
 
-Después de compilar el server Python ya es capaz el template compilado desde `templates/form_denuncias/dist`
+Después de compilar la App Js el server Python ya es capaz de tomar el template compilado desde `templates/form_denuncias/dist`
