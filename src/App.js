@@ -18,15 +18,6 @@ import {
 } from "rbx";
 
 import "./App.css";
-<<<<<<< HEAD
-import 'react-notifications/lib/notifications.css';
-import { DisplayFormikState } from "./helper";
-import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
-
-import { usePosition } from "use-position";
-
-import { NotificationContainer, NotificationManager } from 'react-notifications';
-=======
 import "react-notifications/lib/notifications.css";
 import { DisplayFormikState } from "./helper";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
@@ -35,90 +26,10 @@ import {
   NotificationContainer,
   NotificationManager
 } from "react-notifications";
->>>>>>> f1788e36c940bae9a507a1bc036a492e6fee698c
 import React, { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-<<<<<<< HEAD
-import customFields from "./customFields.json";
-
-class CustomForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.fields = {};
-  }
-  handleChange = (e) => {
-    this.fields[e.target.name] = e.target.value;
-    this.props.setCustomFields(this.fields);
-  }
-  renderField(field) {
-    switch(field.type) {
-      case "checkbox":
-        return <div>
-            <Checkbox name={field.name} value={this.fields[field.name] || ''} onChange={this.handleChange} />
-            <lavel>&nbsp; &nbsp; {field.name}</lavel>
-          </div>
-      case "text":
-        return <div>
-            <Label htmlFor={field.name}>{field.name}</Label>
-            <Control>
-              <Input autoComplete="off" name={field.name} value={this.fields[field.name] || ''} type="text" onChange={this.handleChange}/>
-            </Control>
-          </div>
-      default:
-        return (null);
-    }
-  }
-  render() {
-    const fields = this.props.customFields[this.props.tipoDenuncia];
-    if(fields == null) {
-      return (null);
-    }
-    const sections = fields["sections"];
-    if(sections == null) {
-      return (null);
-    }
-    
-    return sections.map((type, index) =>
-      <Box key={index}>
-      {sections[index].name == "" ? (
-        <Field horizontal>
-          <Field.Body>
-        {
-          sections[index].fields.map((field, fieldIndex) =>
-            <Field key={field.name}>
-              
-              {this.renderField(field)}
-            
-            </Field>
-          )
-        }
-          </Field.Body>
-        </Field>) : 
-        (
-          <Field>
-            <Label>{sections[index].name}</Label>
-            {
-              sections[index].fields.map((field, fieldIndex) =>
-                <Field key={field.name}>
-                  {/*<Label>{field.name}</Label>*/}
-                  <Control>
-                  {this.renderField(field)}
-                  </Control>
-                </Field>
-              )
-            }
-          </Field>
-        )  
-        
-        }
-
-        </Box>
-    );
-  }
-=======
 import customFields from "./custom_fields_v2.json";
 
 const formInitialValues = {
@@ -137,21 +48,12 @@ const formInitialValues = {
   coordenadas: null,
   estado: "pendiente",
   custom_fields: {}
->>>>>>> f1788e36c940bae9a507a1bc036a492e6fee698c
 };
 
 const validationSchema = Yup.object().shape({
   correo: Yup.string().email("Invalid email")
 });
 
-<<<<<<< HEAD
-const App = ({ google }) => {
-  let { latitude, longitude, error } = usePosition();
-  if (error !== null) {
-    latitude = -25.2966808;
-    longitude = -57.6683016;
-  }
-=======
 const postUrl =
   process.env.NODE_ENV !== "production"
     ? `${process.env.REACT_APP_API_URL}/`
@@ -168,27 +70,10 @@ const App = ({ google }) => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [showCustomFields, setShowCustomFields] = useState(null);
->>>>>>> f1788e36c940bae9a507a1bc036a492e6fee698c
 
   const formik = useFormik({
     initialValues: { ...formInitialValues },
     onSubmit: async (values, { resetForm }) => {
-<<<<<<< HEAD
-      // await new Promise(resolve => setTimeout(resolve, 500));
-      console.log(values);
-      fetch("/", {
-        method: "post",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(values, null, 2)
-      }).then((res) => res.json())
-        .then((data) => {
-          resetForm({ values: "" });
-          NotificationManager.success('','Denuncia enviada');
-          document.body.scrollTop = 0; // For Safari
-          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera        
-        })
-        .catch((err) => console.log(err))
-=======
       fetch(postUrl, {
         method: "post",
         headers: { "content-type": "application/json" },
@@ -203,7 +88,6 @@ const App = ({ google }) => {
           document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
         })
         .catch(err => console.log(err));
->>>>>>> f1788e36c940bae9a507a1bc036a492e6fee698c
     },
     validationSchema
   });
@@ -558,13 +442,9 @@ const App = ({ google }) => {
                   </Field.Body>
                 </Field>
               </Box>
-<<<<<<< HEAD
-              <CustomForm tipoDenuncia={values.tipo_denuncia} customFields={customFields} setCustomFields={setCustomFields} initialValues={values.custom_fields} />
-=======
               {showCustomFields && (
                 <Box>{renderSections(showCustomFields)}</Box>
               )}
->>>>>>> f1788e36c940bae9a507a1bc036a492e6fee698c
               <Box>
                 <Field horizontal>
                   <Field.Body>
