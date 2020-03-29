@@ -15,10 +15,18 @@ Levanta la app React en modo desarrollo usando [Webpack devserver](https://webpa
 Abrir [http://localhost:3000](http://localhost:3000).
 
 ## Levantar la App usando Python (Flask, usando virtualenv)
+Crear un archivo `.env` con estas variables:
+``` bash
+#!/bin/sh
+export FLASK_DEBUG=1
+export FLASK_APP=main.py
+export FLASK_RUN_PORT=8080
+```
 ```
 $ virtualenv venv
 $ source venv/bin/activate
 $ pip3 install -r requirements.txt
+$ source .env
 $ python3 -m flask run
 ```
 
