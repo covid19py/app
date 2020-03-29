@@ -5,7 +5,7 @@
         "label": "Acceso",
         "fields": {
           "lavadores": {
-            "label": "Tienen lavaderos de manos con jabon de coco o pulverizador con alcohol hidrolizado",
+            "label": "Tienen lavaderos de manos con jabón de coco o pulverizador con alcohol hidrolizado",
             "type": "checkbox"
           },
           "temperatura": {
@@ -48,7 +48,7 @@
         "type": "text"
       },
       "numero_personas": {
-        "label": "Numero aproximado de personas",
+        "label": "Número aproximado de personas",
         "type": "text"
       }
     }
