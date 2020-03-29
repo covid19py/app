@@ -17,7 +17,7 @@ import {
   Box
 } from "rbx";
 
-import "./App.css";
+import "./Form.css";
 import "react-notifications/lib/notifications.css";
 import { DisplayFormikState } from "../helpers";
 import MapContainer from "../components/MapContainer";
@@ -161,7 +161,7 @@ const App = () => {
     switch (field.type) {
       case "checkbox":
         return (
-          <Label>
+          <Label style={{ lineHeight: 3 }}>
             <Checkbox
               id={`custom_fields.${section}.${id}`}
               value={values.custom_fields[section][id]}
@@ -174,7 +174,7 @@ const App = () => {
               }}
               type="checkbox"
             />
-            {field.label}
+            &nbsp;{field.label}
           </Label>
         );
 
@@ -182,16 +182,18 @@ const App = () => {
         return (
           <Field>
             <Label htmlFor={`custom_fields.${id}`}>{field.label}</Label>
-            <Input
-              id={`custom_fields.${id}`}
-              value={values.custom_fields[id]}
-              autoComplete="off"
-              name={`custom_fields.${id}`}
-              type="text"
-              onChange={e => {
-                setFieldValue(`custom_fields.${id}`, e.target.value, false);
-              }}
-            />
+            <Control>
+              <Input
+                id={`custom_fields.${id}`}
+                value={values.custom_fields[id]}
+                autoComplete="off"
+                name={`custom_fields.${id}`}
+                type="text"
+                onChange={e => {
+                  setFieldValue(`custom_fields.${id}`, e.target.value, false);
+                }}
+              />
+            </Control>
           </Field>
         );
       default:
@@ -235,9 +237,9 @@ const App = () => {
       if (hasType && hasLabel) {
         return (
           <Field key={index}>
-            <Field horizontal key={section}>
+            <Field.Body horizontal key={section}>
               <Control>{renderField(sections[section], section, null)}</Control>
-            </Field>
+            </Field.Body>
           </Field>
         );
       }
@@ -351,7 +353,11 @@ const App = () => {
                 </Field>
               </Box>
               {showCustomFields && (
-                <Box>{renderSections(showCustomFields)}</Box>
+                <Box>
+                  <Field horizontal>
+                    <Field.Body>{renderSections(showCustomFields)}</Field.Body>
+                  </Field>
+                </Box>
               )}
               <Box>
                 <Field horizontal>
