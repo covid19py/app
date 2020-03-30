@@ -39,14 +39,12 @@ export function SectionContainer({ sections, setFieldValue, values }) {
       return (
         <Field key={index}>
           <Field.Body horizontal key={section}>
-            <Control>
-              <FieldContainer
-                field={sections[section]}
-                id={section}
-                setFieldValue={setFieldValue}
-                values={values}
-              />
-            </Control>
+            <FieldContainer
+              field={sections[section]}
+              id={section}
+              setFieldValue={setFieldValue}
+              values={values}
+            />
           </Field.Body>
         </Field>
       );

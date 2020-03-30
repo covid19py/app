@@ -33,6 +33,7 @@ export const FieldContainer = ({ field, id, section, setFieldValue, values }) =>
               value={values.custom_fields[id]}
               autoComplete="off"
               name={`custom_fields.${id}`}
+              placeholder={field.label}
               type="text"
               onChange={e => {
                 setFieldValue(`custom_fields.${id}`, e.target.value, false);
