@@ -61,10 +61,16 @@ $(document).ready(function () {
         fechaElem.text(datos['creado'].format('DD/MM/YY HH:mm'))
         tipoElem = col.find('.tipo')
         tipoElem.text(datos['tipo_denuncia'])
-        dptoElem = col.find('.departamento')
-        dptoElem.text(datos['departamento'])
-        ciudadElem = col.find('.ciudad')
-        ciudadElem.text(datos['ciudad'])
+
+        getDepartament(marker.datos).then(function (success) {
+            dptoElem = col.find('.departamento')
+            dptoElem.text(success.departamento)
+            ciudadElem = col.find('.ciudad')
+            ciudadElem.text(success.ciudad)
+        }, function (error) {
+            console.log(error);
+        });
+        
         ubicarElem = col.find('a')
         ubicarElem.on('click', function () {
             markerFocus(marker)
