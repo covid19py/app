@@ -1,10 +1,10 @@
 $(document).ready(function () {
-    var asu = {lat: -23.4321899, lng: -58.3263222},
-    //var asu = { lat: -25.29066, lng: -57.50591 },
+    var asu = { lat: -23.4321899, lng: -58.3263222 },
+        //var asu = { lat: -25.29066, lng: -57.50591 },
         map = new google.maps.Map(
             document.getElementById('map'),
-            {zoom: 6, center: asu}),
-            //{ zoom: 12, center: asu }),
+            { zoom: 6, center: asu }),
+        //{ zoom: 12, center: asu }),
         markers = {}
     // window.map = map
     var markerSzW = 30,
@@ -40,8 +40,8 @@ $(document).ready(function () {
         $('.detalle_denuncia textarea').text(datos['observaciones'])
         $('.detalle_denuncia #fecha').text(datos['creado'].format('DD/MM/YY HH:mm'))
         $('.detalle_denuncia #denuncia_campos').empty()
-        for(i in datos['campos']) {
-            var li = '<p><b>' + i + '</b> ' + datos['campos'][i]  + '</p>'
+        for (i in datos['campos']) {
+            var li = '<p><b>' + i + '</b> ' + datos['campos'][i] + '</p>'
             $('.detalle_denuncia #denuncia_campos').append(li)
         }
         marker.setIcon(activeMarkerIcon)
@@ -85,8 +85,8 @@ $(document).ready(function () {
     function getBounds() {
         boundaries = map.getBounds()
         query = [
-            [ boundaries["Za"]["i"], boundaries["Ua"]["i"] ],
-            [ boundaries["Za"]["j"], boundaries["Ua"]["j"] ]
+            [boundaries["Za"]["i"], boundaries["Ua"]["i"]],
+            [boundaries["Za"]["j"], boundaries["Ua"]["j"]]
         ]
         return query
     }
@@ -99,7 +99,7 @@ $(document).ready(function () {
             data: JSON.stringify(boundaries),
             dataType: 'json',
             contentType: 'application/json'
-        }).done(function(data) {
+        }).done(function (data) {
             ids = [];
             for (i in data) {
                 var d = data[i],
@@ -128,7 +128,7 @@ $(document).ready(function () {
                 if (ids.indexOf(id) == -1) {
                     m.setMap(null)
                     removeCol(m)
-                    delete(markers[id])
+                    delete (markers[id])
                 }
             }
         })
@@ -142,6 +142,25 @@ $(document).ready(function () {
         })
     })
 
+    let getDepartament = function (data) {
+        return new Promise((resolve, reject) => {
+            let point = new google.maps.LatLng(data['coordenadas'][0], data['coordenadas'][1])
+            let geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'location': point }, function (results, status) {
+                if (status === 'OK') {
+                    let region = results.length - 2;
+                    let dpto = results[region].address_components[0].long_name;
+                    let json = {
+                        departamento: dpto.substring(dpto.lastIndexOf(" ")).trim(),
+                        ciudad: results[region - 1].address_components[0].long_name.trim()
+                    };
+                    resolve(json);
+                } else {
+                    reject("error");
+                }
+            });
+        });
+    }
     // syncMarkers()
     setInterval(syncMarkers, 2000)
 
